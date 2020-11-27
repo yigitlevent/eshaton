@@ -7,7 +7,7 @@ import { router as UserRouter } from "./routes/user";
 
 export const DATABASE_URL = process.env.DATABASE_URL || "   "; //TODO
 export const PORT = process.env.PORT || 3000;
-export const SECRET_KEY = process.env.SECRET_KEY as string || "test_secret_key";
+export const SECRET_KEY = process.env.SECRET_KEY || "test_secret_key";
 
 export const app: express.Application = express();
 
@@ -20,15 +20,3 @@ app.use(express.static(app.get("publicPath")));
 
 app.use("/", IndexRouter);
 app.use("/user", UserRouter);
-
-declare global {
-	namespace Express {
-		interface Response {
-			rowCount: number;
-			rows: any[];
-		}
-		interface Request {
-			decoded: any;
-		}
-	}
-}
