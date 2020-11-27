@@ -40,18 +40,18 @@ const BLOCKS: { [key: string]: blockrow[]; } = {
 
 	"culture": [
 		{ name: "Culture", type: "title-major", checkboxes: 0 },
-		{ name: "culture", type: "logo", checkboxes: 0 },
-		{ name: "culture-select", type: "select", checkboxes: 0, selectdata: ["Borca", "Franka", "Pollen", "Balkhan", "Hyprispania", "Purgare", "Africa"] }
+		{ name: "culture-icon", type: "logo", checkboxes: 0 },
+		{ name: "cultures-select", type: "select", checkboxes: 0, selectdata: ["Borca", "Franka", "Pollen", "Balkhan", "Hyprispania", "Purgare", "Africa"] }
 	],
 	"concept": [
 		{ name: "Concept", type: "title-major", checkboxes: 0 },
-		{ name: "concept", type: "logo", checkboxes: 0 },
-		{ name: "concept-select", type: "select", checkboxes: 0, selectdata: ["0. The Advanturer", "I. The Creator", "II. The Mentor", "III. The Martyr", "IV. The Ruler", "V. The Seeker", "VI. The Healer", "VII. The Traditionalist", "VIII. The Mediator", "IX. The Hermit", "X. The Heretic", "XI. The Conqueror", "XII. The Abomination", "XIII. Destroyer", "XIV. The Chosen", "XV. The Defiler", "XVI. The Protector", "XVII. The Visionary", "XVIII. The Zealot", "XIX. The Disciple", "XX. The Righteous", "XXI. The Traveller"] }
+		{ name: "concept-icon", type: "logo", checkboxes: 0 },
+		{ name: "concepts-select", type: "select", checkboxes: 0, selectdata: ["0. The Advanturer", "I. The Creator", "II. The Mentor", "III. The Martyr", "IV. The Ruler", "V. The Seeker", "VI. The Healer", "VII. The Traditionalist", "VIII. The Mediator", "IX. The Hermit", "X. The Heretic", "XI. The Conqueror", "XII. The Abomination", "XIII. Destroyer", "XIV. The Chosen", "XV. The Defiler", "XVI. The Protector", "XVII. The Visionary", "XVIII. The Zealot", "XIX. The Disciple", "XX. The Righteous", "XXI. The Traveller"] }
 	],
 	"cult": [
 		{ name: "Cult", type: "title-major", checkboxes: 0 },
-		{ name: "cult", type: "logo", checkboxes: 0 },
-		{ name: "cult-select", type: "select", checkboxes: 0, selectdata: ["Spitalians", "Chroniclers", "Hellvetics", "Judges", "Clanners", "Scrappers", "Neolibyans", "Scourgers", "Anubians", "Jehammedans", "Apocalyptics", "Anabaptists", "Palers"] }
+		{ name: "cult-icon", type: "logo", checkboxes: 0 },
+		{ name: "cults-select", type: "select", checkboxes: 0, selectdata: ["Spitalians", "Chroniclers", "Hellvetics", "Judges", "Clanners", "Scrappers", "Neolibyans", "Scourgers", "Anubians", "Jehammedans", "Apocalyptics", "Anabaptists", "Palers"] }
 	],
 
 	"body": [
@@ -177,9 +177,8 @@ export function Block({ datakey }: blockprops): JSX.Element {
 	const [imgSrc, setImgSrc] = useState(`./assets/icons/empty.svg`);
 
 	const selectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => {
-		console.log(event.target.value);
 		//@ts-ignore
-		setImgSrc(`./assets/icons/${rowName}/${event.target.value}.svg`);
+		setImgSrc(`./assets/icons/${rowName.split("-")[0]}/${event.target.value}.svg`);
 	};
 
 	const BLOCKDATA = BLOCKS[datakey];
@@ -188,10 +187,6 @@ export function Block({ datakey }: blockprops): JSX.Element {
 			const checkboxes: JSX.Element[] = [];
 
 			for (let i = 0; i < row.checkboxes; i++) {
-				//inputReferences[`${row.name.toLowerCase().replace(/ /g, '')}}_${i}`] = "";
-
-				// TODO STORE REFERENCES?
-
 				checkboxes.push(
 					<input
 						key={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
@@ -226,7 +221,7 @@ export function Block({ datakey }: blockprops): JSX.Element {
 					}
 
 					{(row.type === "logo")
-						? <img className={`${row.name}`} ref={imgRef} src={imgSrc} alt="" />
+						? <img className={`icon ${row.name}`} ref={imgRef} src={imgSrc} alt="" />
 						: null
 					}
 
@@ -243,7 +238,6 @@ export function Block({ datakey }: blockprops): JSX.Element {
 
 	useEffect(() => {
 		if (imgRef && imgRef.current) {
-			console.log(imgSrc);
 			//@ts-ignore
 			imgRef.current.src = imgSrc;
 		}
@@ -271,6 +265,8 @@ function Select({ row, onChange }: selectprops): JSX.Element {
 			);
 		}
 	);
+
+	options?.unshift(<option key={""} value=""></option>);
 
 	return (
 		<select

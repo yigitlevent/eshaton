@@ -70,6 +70,12 @@ input[type="checkbox"] {
 	}
 }
 
+select {
+	background: $color-form;
+	color: $color-text;
+	border: none;
+}
+
 .divider {
 	flex: 0 0 100%;
 	border: none;
@@ -329,17 +335,10 @@ input[type="checkbox"] {
 							width: 100%;
 							margin: 12px auto;
 
-							& > .culture {
+							& > .icon {
 								height: 100px;
 								width: 100%;
-							}
-							& > .concept {
-								height: 100px;
-								width: 100%;
-							}
-							& > .cult {
-								height: 100px;
-								width: 100%;
+								filter: invert(80%);
 							}
 						}
 
