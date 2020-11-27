@@ -7,7 +7,15 @@ const TABLES: { [key: string]: tabledata; } = {
 		"rows": 4,
 		"columns": ["Armors", "Value", "Properties", "Enc", "Tech", "Slots"]
 	},
-	"equipments": {
+	"equipments_1": {
+		"rows": 12,
+		"columns": ["Equipments", "Enc"]
+	},
+	"equipments_2": {
+		"rows": 12,
+		"columns": ["Equipments", "Enc"]
+	},
+	"equipments_3": {
 		"rows": 12,
 		"columns": ["Equipments", "Enc"]
 	},
@@ -22,7 +30,7 @@ export function Table({ datakey }: tableprops): JSX.Element {
 
 	const rows: JSX.Element[] = TABLEDATA.columns.map(
 		(column) => {
-			return (<div className="title" key={column}>{column}</div>);
+			return (<div className="title" key={column}>{column.toUpperCase()}</div>);
 		}
 	);
 

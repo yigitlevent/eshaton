@@ -1,7 +1,9 @@
 import { Pool, QueryResult } from "pg";
 
+import { DATABASE_URL } from "../app";
+
 export const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
+	connectionString: DATABASE_URL,
 	ssl: { rejectUnauthorized: false }
 });
 

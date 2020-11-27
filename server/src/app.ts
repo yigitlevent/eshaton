@@ -5,7 +5,9 @@ import cors from "cors";
 import { router as IndexRouter } from "./routes/index";
 import { router as UserRouter } from "./routes/user";
 
-import { connect } from "./middleware/database";
+export const DATABASE_URL = process.env.DATABASE_URL || "   "; //TODO
+export const PORT = process.env.PORT || 3000;
+export const SECRET_KEY = process.env.SECRET_KEY as string || "test_secret_key";
 
 export const app: express.Application = express();
 

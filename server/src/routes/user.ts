@@ -3,9 +3,9 @@ import { check, ValidationError, Result, validationResult } from "express-valida
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import { app, SECRET_KEY } from "../app";
 import { getDateTime } from "../middleware/datetime";
 import { pool } from "../middleware/database";
-import { app } from "../app";
 
 export const router = express.Router();
 
@@ -127,7 +127,7 @@ router.post("/auth",
 					if (error) { return response.status(400).json({ status: "failure", message: "No username has this ID." }); }
 
 					try {
-						const isVerified: any = jwt.verify(access_token, process.env.SECRET_KEY as string);
+						const isVerified: any = jwt.verify(access_token, SECRET_KEY);
 						response.status(200).send({ status: "success", message: "User verified." });
 					}
 					catch (e) {

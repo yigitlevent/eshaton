@@ -1,6 +1,8 @@
 import * as express from "express";
 import * as jwt from "jsonwebtoken";
 
+import { SECRET_KEY } from "../app";
+
 export function auth(request: express.Request, response: express.Response, next: express.NextFunction): string | boolean {
 	const access_token: string = request.cookies["access_token"];
 	
@@ -10,7 +12,7 @@ export function auth(request: express.Request, response: express.Response, next:
 	}
 
 	try {
-		const isVerified: any = jwt.verify(access_token, process.env.SECRET_KEY as string);
+		const isVerified: any = jwt.verify(access_token, SECRET_KEY);
 		const decoded: any = jwt.decode(access_token, { complete: true });
 		response.status(200).send({ status: "success", message: "User verified." });
 		return decoded.payload.username;

@@ -8,7 +8,7 @@ import { Register } from "./components/Register";
 import { CharacterSheet } from "./components/CharacterSheet";
 
 function App(): JSX.Element {
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLogin, setIsLogin] = useState(true);
 
 	const [sheet, setSheet] = useState("none" as sheettype);

@@ -27,10 +27,13 @@ export function CharacterSheet({ sheet }: charactersheetprops): JSX.Element {
 
 	return (
 		<form ref={ref} className="character-sheet" onLoad={() => { if (sheet === "edit") { /* TODO: Do editing load */ } }}>
-			<input className="extra" type="submit" id="c_submit" name="c_submit" value="Save Character" onClick={(event) => { submit(event); }} />
-			<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" />
-			<div className="extra id">{`ID: ##########`}</div>
-			<div className="extra player">{`Player: ##########`}</div>
+			<div className="extras">
+				<div className="extra player">{`Player: ##########`}</div>
+				<div className="extra id">{`ID: ##########`}</div>
+				<br />
+				<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" />
+				<input className="extra" type="submit" id="c_submit" name="c_submit" value="Save Character" onClick={(event) => { submit(event); }} />
+			</div>
 
 			<Divider>{`ARCHETYPE`}</Divider>
 			<div className="wrapper">
@@ -77,7 +80,9 @@ export function CharacterSheet({ sheet }: charactersheetprops): JSX.Element {
 
 			<Divider>{`POSSESSIONS`}</Divider>
 			<div className="wrapper">
-				<Table datakey={"equipments"} />
+				<Table datakey={"equipments_1"} />
+				<Table datakey={"equipments_2"} />
+				<Table datakey={"equipments_3"} />
 				<Table datakey={"artifacts"} />
 			</div>
 		</form>

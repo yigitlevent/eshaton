@@ -15,13 +15,15 @@ const BLOCKS: { [key: string]: blockrow[]; } = {
 	],
 
 	"main-center": [
-		{ name: "Character Portrait", type: "input", checkboxes: 0, placeholder: true },
-		{ name: "empty", type: "empty", checkboxes: 0 },
+		{ name: "Portrait", type: "logo", checkboxes: 0, placeholder: true },
+		{ name: "Portrait Link", type: "input", checkboxes: 0, placeholder: true },
 		{ name: "Age", type: "input", checkboxes: 0, placeholder: true },
-		{ name: "Weight", type: "input", checkboxes: 0, placeholder: true },
 		{ name: "Sex", type: "input", checkboxes: 0, placeholder: true },
+		{ name: "Weight", type: "input", checkboxes: 0, placeholder: true },
+		{ name: "Height", type: "input", checkboxes: 0, placeholder: true },
 		{ name: "Drafts", type: "input", checkboxes: 0, placeholder: true },
 		{ name: "Dinars", type: "input", checkboxes: 0, placeholder: true },
+		{ name: "Hometown", type: "input", checkboxes: 0, placeholder: true },
 		{ name: "Experience", type: "input", checkboxes: 0, placeholder: true },
 	],
 
@@ -256,10 +258,8 @@ function Select({ row, onChange }: selectprops): JSX.Element {
 			let val = split[split.length - 1].toLowerCase();
 
 			return (
-				<option
-					key={val}
-					value={val}
-				>{data}
+				<option key={val} value={val}>
+					{data.toUpperCase()}
 				</option>
 			);
 		}
