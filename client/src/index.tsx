@@ -1,55 +1,104 @@
-import { useEffect, useState, StrictMode } from "react";
+import { useEffect, useState, StrictMode, useCallback } from "react";
 import ReactDOM from "react-dom";
+import { ToastOptions, ToastContainer, toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 import "./style.scss";
 
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { CharacterSheet } from "./components/CharacterSheet";
 
+const notificationOptions = {
+	position: "top-center",
+	autoClose: 3000,
+	hideProgressBar: true,
+	closeOnClick: false,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+};
+
 function App(): JSX.Element {
+	const [no] = useState(false);
+
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLogin, setIsLogin] = useState(true);
 
 	const [sheet, setSheet] = useState("none" as sheettype);
 	const [campaign, setCampaign] = useState("none" as campaigntype);
 
-	const userRequest = (path: string, requestType: requests, data?: registrationform | loginform): void => {
+	const [charRows, setCharRows] = useState([] as any[]);
+	const [campRows, setCampRows] = useState([] as any[]);
+
+	const userRequest = (path: string, requestType: requests, data?: any): void => {
 		const request = new XMLHttpRequest();
 		request.open("POST", path, true); // true = asynchronous
 		request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
 
 		if (data) { request.send(JSON.stringify(data)); }
-		else { request.abort(); }
+		else { request.send(); }
 
 		request.onreadystatechange = () => {
 			if (request.readyState === XMLHttpRequest.DONE) {
 				const response = JSON.parse(request.response);
 
 				if (response.status === "failure") {
-					console.log(response.message);
+					if (requestType !== "auth") {
+						let errorMsg = [];
+						if (response.errors) { errorMsg = response.errors.map((error: any) => { return (error.msg); }); }
+						if (response.error) {
+							let det = response.error.detail.replace(/\=/g, ' ').replace(/\(|\)/g, '').substring(4);
+							errorMsg.push(det.charAt(0).toUpperCase() + det.slice(1));
+						}
+						toast.error(errorMsg.join(" "), notificationOptions as ToastOptions);
+					}
 				}
-				else if (requestType === "login" && response.status === "success") {
-					console.log(response.message);
-					setIsLoggedIn(true);
-					// TODO: Login successful.
-					// TODO: Load user campaigns and characters
-				}
-				else if (requestType === "register" && response.status === "success") {
-					console.log(response.message);
-					setIsLogin(true);
-					// TODO: Registration successful, please login.
+				else {
+					if (requestType === "login" || requestType === "auth") {
+						toast.success(response.message, notificationOptions as ToastOptions);
+						setIsLoggedIn(true);
+
+						userRequest("/char/list", "list_char");
+					}
+					else if (requestType === "register") {
+						toast.success(response.message, notificationOptions as ToastOptions);
+						setIsLogin(true);
+					}
+					else if (requestType === "add_char" || requestType === "add_camp") {
+						toast.success(response.message, notificationOptions as ToastOptions);
+					}
+					else if (requestType === "list_char") {
+						setCharRows(response.rows);
+						toast.success(response.message, notificationOptions as ToastOptions);
+					}
 				}
 			}
 		};
 	};
 
-	useEffect(() => {
+	const startAuth = useCallback(() => { userRequest("/user/auth", "auth"); }, [no]);
 
-	}, []);
+	useEffect(() => {
+		if (!isLoggedIn) { startAuth(); }
+
+		console.log(charRows);
+	}, [startAuth, charRows]);
 
 	return (
 		<StrictMode>
+			<ToastContainer
+				position="top-center"
+				autoClose={3000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/>
+
 			{(!isLoggedIn)
 				? <div className="entrance-wrapper">
 					<div className="entrance">
@@ -82,7 +131,7 @@ function App(): JSX.Element {
 					</div>
 
 					{(sheet !== "none")
-						? <CharacterSheet sheet={sheet} />
+						? <CharacterSheet sheet={sheet} userRequest={userRequest} />
 						: null
 					}
 

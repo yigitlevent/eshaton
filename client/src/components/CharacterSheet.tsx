@@ -3,8 +3,9 @@ import { useRef } from "react";
 import { Divider } from "../parts/Divider";
 import { Block } from "../parts/Block";
 import { Table } from "../parts/Table";
+import { generate } from "../shared/generate";
 
-export function CharacterSheet({ sheet }: charactersheetprops): JSX.Element {
+export function CharacterSheet({ sheet, userRequest }: charactersheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 
 	const submit = (event: React.FormEvent<HTMLInputElement>) => {
@@ -19,19 +20,22 @@ export function CharacterSheet({ sheet }: charactersheetprops): JSX.Element {
 				testObject[ref.current[i].id] = (ref.current[i] as HTMLInputElement).value;
 			}
 		}
-
 		delete testObject["c_submit"];
 
-		console.log(testObject);
+		userRequest("/char/new", "add_char", {
+			c_name: testObject.c_name,
+			c_secretkey: testObject.c_character_id,
+			c_data: JSON.stringify(testObject)
+		});
 	};
 
 	return (
 		<form ref={ref} className="character-sheet" onLoad={() => { if (sheet === "edit") { /* TODO: Do editing load */ } }}>
 			<div className="extras">
-				<div className="extra player">{`Player: ##########`}</div>
-				<div className="extra id">{`ID: ##########`}</div>
-				<br />
-				<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" />
+				<label className="extra label">Character ID: </label>
+				<input className="extra id" id="c_character_id" name="c_character_id" value={generate(32)} readOnly />
+				<label className="extra label">Campaign ID: </label>
+				<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" readOnly />
 				<input className="extra" type="submit" id="c_submit" name="c_submit" value="Save Character" onClick={(event) => { submit(event); }} />
 			</div>
 

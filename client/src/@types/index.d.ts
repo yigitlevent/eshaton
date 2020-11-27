@@ -17,7 +17,7 @@ interface coordinate {
 	y: number;
 }
 
-type requests = "register" | "login" | "auth";
+type requests = "register" | "login" | "auth" | "add_char" | "list_char" | "get_char" | "add_camp" | "list_camp" | "get_camp";
 type sheettype = "none" | "new" | "edit" | "view";
 type campaigntype = "none" | "new" | "edit" | "view";
 
@@ -53,6 +53,7 @@ interface entranceprops {
 
 interface charactersheetprops {
 	sheet: "none" | "new" | "edit" | "view";
+	userRequest: (path: string, requestType: requests, data?: any) => void;
 }
 
 interface blockprops {
@@ -61,11 +62,16 @@ interface blockprops {
 
 interface selectprops {
 	row: blockrow;
-	onChange: (event: React.ChangeEvent<HTMLSelectElement>, rowName:string) => void;
+	onChange: (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => void;
 }
 
 interface tableprops {
 	datakey: string;
+}
+
+interface notificationprops {
+	type: "error" | "message" | "success";
+	message: string;
 }
 
 interface dividerprops {

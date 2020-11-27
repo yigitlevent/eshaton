@@ -1,35 +1,44 @@
 import http from "http";
+import { Pool } from "pg";
 
-import { app, PORT } from "../app";
 import { connect } from "../middleware/database";
+import { output } from "../shared/output";
 
-app.set("port", normalizePort(PORT));
+import { app, PRODUCTION, HOST, PORT, DATABASE_URL, SECRET_KEY } from "../app";
+
+output(PRODUCTION, "yellow");
+output(HOST, "yellow");
+output(PORT, "yellow");
+output(DATABASE_URL, "yellow");
+output(SECRET_KEY, "yellow");
 
 const server = http.createServer(app);
 
+export const pool = new Pool({
+	connectionString: DATABASE_URL,
+	ssl: PRODUCTION
+});
+
+pool.on("error", (err: Error) => {
+	console.log("idle client error", err.message, err.stack);
+});
+
 connect();
 
-server.listen(app.get("port"), () => { console.log("Server listening at http://" + app.get("host") + ":" + app.get("port")); });
+server.listen((PORT as number), "localhost");
 server.on("error", onError);
 server.on("listening", onListening);
-
-function normalizePort(val: any): number | boolean {
-	const port = parseInt(val, 10);
-	if (isNaN(port)) { return val; }
-	if (port >= 0) { return port; }
-	return false;
-}
 
 function onError(error: any): void {
 	if (error.syscall !== "listen") { throw error; }
 	// handle specific listen errors with friendly messages
 	switch (error.code) {
 		case "EACCES":
-			console.error(app.get("port") + " requires elevated privileges");
+			console.error(PORT + " requires elevated privileges");
 			process.exit(1);
 			break;
 		case "EADDRINUSE":
-			console.error(app.get("port") + " is already in use");
+			console.error(PORT + " is already in use");
 			process.exit(1);
 			break;
 		default:
@@ -38,9 +47,6 @@ function onError(error: any): void {
 }
 
 function onListening(): void {
-	const addr = server.address();
-	//@ts-ignore
-	const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-	//debug("Listening on " + bind);
-	console.log("Listening on " + bind);
+	let addr: any = server.address();
+	output(`Server listening at http://${addr.address}:${addr.port} (${addr.family})`, "cyan");
 }
