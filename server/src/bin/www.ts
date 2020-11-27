@@ -4,13 +4,14 @@ import { Pool } from "pg";
 import { connect } from "../middleware/database";
 import { output } from "../shared/output";
 
-import { app, PRODUCTION, HOST, PORT, DATABASE_URL, SECRET_KEY } from "../app";
+import { app, PRODUCTION, PORT, DATABASE_URL, SECRET_KEY } from "../app";
 
-output(PRODUCTION, "yellow");
-output(HOST, "yellow");
-output(PORT, "yellow");
-output(DATABASE_URL, "yellow");
-output(SECRET_KEY, "yellow");
+if (!PRODUCTION) {
+	output(PRODUCTION, "yellow");
+	output(PORT, "yellow");
+	output(DATABASE_URL, "yellow");
+	output(SECRET_KEY, "yellow");
+}
 
 const server = http.createServer(app);
 
@@ -25,7 +26,9 @@ pool.on("error", (err: Error) => {
 
 connect();
 
-server.listen((PORT as number), HOST);
+if (PRODUCTION) { server.listen((PORT as number)); }
+else { server.listen((PORT as number), "localhost"); }
+
 server.on("error", onError);
 server.on("listening", onListening);
 

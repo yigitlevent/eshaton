@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { getDateTime } from "../shared/datetime";
 import { pool } from "../bin/www";
-import { SECRET_KEY } from "../app";
+import { PRODUCTION, SECRET_KEY } from "../app";
 import { output } from "../shared/output";
 
 export const router = express.Router();
@@ -38,7 +38,7 @@ router.post("/new",
 					[c_name, _username, c_secretkey, c_data, dateTime],
 					async (error, results) => {
 						if (error) {
-							output(error);
+							if (!PRODUCTION) { output(error); };
 							return response.status(400).json({ status: "failure", message: "Character creation unsuccessful.", error });
 						}
 						else {

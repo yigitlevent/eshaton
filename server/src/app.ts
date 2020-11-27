@@ -9,7 +9,6 @@ import { router as CharacterRouter } from "./routes/char";
 import { router as CampaignRouter } from "./routes/camp";
 
 export const PRODUCTION = (process.env.ENV as string === "production") || false;
-export const HOST = process.env.HOST || "localhost";
 export const PORT = normalizePort(process.env.PORT) || normalizePort(3000);
 export const DATABASE_URL = (process.env.DATABASE_URL as string) || "postgresql://testuser:testpassword@localhost:5432/eshaton_test";
 export const SECRET_KEY = (process.env.SECRET_KEY as string) || "test_secret_key";

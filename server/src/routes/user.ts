@@ -23,7 +23,7 @@ router.post("/register",
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
-			output(errors);
+			if (!PRODUCTION) { output(errors); };
 			return response.status(400).json({ status: "failure", message: "Registration failed.", errors: errors });
 		}
 
@@ -60,7 +60,7 @@ router.post("/login",
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
-			output(errors);
+			if (!PRODUCTION) { output(errors); };
 			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors });
 		}
 
@@ -74,11 +74,10 @@ router.post("/login",
 				[l_username],
 				async (error, results) => {
 					if (error) {
-						output(error);
+						if (!PRODUCTION) { output(error); };
 						return response.status(400).json({ status: "failure", message: "Login unsuccessful.", error });
 					}
 					if (results.rows.length < 1) {
-						output("Username incorrect.");
 						return response.status(400).json({ status: "failure", message: "Username incorrect.", error });
 					}
 
@@ -100,13 +99,12 @@ router.post("/login",
 							.json({ status: "success", message: "Login successful." });
 					}
 					else {
-						output("Password incorrect.");
 						return response.status(201).json({ status: "failure", message: "Password incorrect." });
 					}
 				});
 		}
 		catch (err) {
-			output(err);
+			if (!PRODUCTION) { output(err); };
 			return response.status(500).send({ status: "failure", message: "Unforseen error occured.", error: err });
 		}
 		finally {
@@ -120,7 +118,7 @@ router.post("/auth",
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
-			output(errors);
+			if (!PRODUCTION) { output(errors); };
 			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors });
 		}
 
