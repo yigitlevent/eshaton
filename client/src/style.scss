@@ -3,6 +3,7 @@ $color-black: #000000 !default;
 $color-black-light: #111111 !default;
 $color-white: #ffffff !default;
 $color-form: #333333 !default;
+$color-light-bg: #aaaaaa !default;
 
 $color-text: #cccccc !default;
 $color-text-darker: #aaaaaa !default;
@@ -38,27 +39,6 @@ body {
 	background-color: $color-black;
 }
 
-.loading {
-	height: 100%;
-	width: 100%;
-	position: relative;
-
-	& > div {
-		color: #345483;
-		position: absolute;
-		top: 15%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	& > .spinner {
-		position: absolute;
-		top: 20%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-}
-
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -67,9 +47,9 @@ input[type="password"] {
 	border: none;
 	background: $color-form;
 	color: $color-text;
-	font-size: 1em;
+	font-size: 0.9em;
 	height: 20px;
-	margin: 0px 0px 3px 10px;
+	margin: 0px 0px 3px 6px;
 }
 
 input[type="button"],
@@ -86,7 +66,26 @@ input[type="checkbox"] {
 	appearance: none;
 
 	&:checked {
-		background-color: $color-text;
+		background: $color-light-bg;
+	}
+}
+
+.divider {
+	flex: 0 0 100%;
+	border: none;
+	display: flex;
+	align-items: center;
+	margin: 32px 0 4px 0;
+
+	& > .border {
+		border-bottom: 1px solid $color-red;
+		width: 100%;
+	}
+
+	& > .content {
+		padding: 0 10px 0 10px;
+		font-size: 2em;
+		min-width: max-content;
 	}
 }
 
@@ -164,7 +163,7 @@ input[type="checkbox"] {
 		height: 100%;
 
 		& > .dashboard {
-			max-width: 800px;
+			max-width: 600px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
 			background: $color-black-light;
@@ -218,125 +217,158 @@ input[type="checkbox"] {
 		}
 
 		& > .character-sheet {
-			display: flex;
-			flex-flow: row wrap;
-			justify-content: flex-start;
-			align-items: flex-start;
-			align-content: flex-start;
-
-			max-width: 800px;
+			max-width: 900px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
 			background: $color-black-light;
 			border: 1px $color-red solid;
 
-			& > .title {
-				font-size: 1.6em;
-				text-align: center;
-				border-bottom: 1px #f00 solid;
-				flex: 6 0 100%;
+			& > .extra {
+				float: right;
+				margin: 4px 8px;
+				height: 20px;
+				font-size: 0.9em;
 			}
 
-			& > hr {
-				flex: 0 0 100%;
-				border: none;
-			}
+			& > .wrapper {
+				display: flex;
+				flex-flow: row wrap;
+				justify-content: flex-start;
+				align-items: flex-start;
+				align-content: flex-start;
 
-			& > .basic-text {
-				flex: 1 0 50%;
-			}
-
-			& > .basic-text-mini {
-				flex: 1 1 26%;
-			}
-
-			& > .culture,
-			& > .concept,
-			& > .cult {
-				flex: 1 1 33%;
-
-				& > .title {
-					width: 100%;
-					font-size: 1.4em;
-					text-align: center;
+				& > .basic-text {
+					flex: 1 0 48%;
 				}
 
-				& > .logo {
-					background: transparent url("./assets/icons/concepts/abomination.svg") no-repeat center center;
-					height: 100px;
-					width: 100%;
-					margin: 12px auto;
-				}
+				& > .basic-text-mini {
+					flex: 1 1 19%;
 
-				& > input {
-					width: 70%;
-					margin: 0 auto;
-				}
-			}
-
-			& > .group {
-				flex: 1 1 230px;
-				margin: 5px 10px;
-
-				& > .condition-row {
-					grid-template-columns: repeat(24, 8px);
-					
-					& > .condition {
-						grid-column-start: span 24;
+					&.right {
+						text-align: right;
 					}
 				}
 
-				& > .condition-row-mini {
-					grid-template-columns: repeat(12, 8px);
-					& > .condition {
-						grid-column-start: span 12;
-					}
-				}
-
-				& > .condition-row,
-				& > .condition-row-mini {
+				& > .table {
+					min-width: 100%;
 					display: grid;
 					grid-template-rows: auto;
-					width: 100%;
-					gap: 1px;
-					justify-content: center;
-					text-align: center;
+					margin-bottom: 6px;
 
-					& > .condition {
-						margin-bottom: 6px;
+					&.columns-2 {
+						grid-template-columns: auto 50px;
+					}
+					&.columns-4 {
+						grid-template-columns: auto 100px auto 100px;
+					}
+					&.columns-6 {
+						grid-template-columns: auto 100px auto 50px 50px 50px;
+					}
+					&.columns-9 {
+						grid-template-columns: auto 100px 100px 100px 50px auto 50px 50px 50px;
+					}
+
+					& > .title {
+						padding: 2px 8px 1px;
+						font-weight: bold;
+
+						&:first-child {
+							background: $color-light-bg;
+							color: $color-black-light;
+						}
 					}
 				}
 
-				& > .row {
-					display: grid;
-					grid-template-columns: auto repeat(6, 8px);
-					grid-template-rows: 20px;
-					gap: 1px;
-					margin-bottom: 1px;
+				& > .block {
+					flex: 1 1 230px;
+					margin: 5px 10px;
 
-					&:first-child {
-						margin-bottom: 3px;
+					&.main-left,
+					&.main-right {
+						flex: 1 1 230px;
+					}
+					&.main-center {
+						flex: 1 1 100px;
 					}
 
-					& > .title {
-						grid-column-start: span 7;
-					}
+					& > .row {
+						display: grid;
+						grid-template-rows: 20px;
+						gap: 1px;
+						margin-bottom: 1px;
 
-					& > .attribute,
-					& > .title {
-						background-color: $color-text;
-						color: $color-black-light;
-						padding: 1px 4px;
-						font-weight: bold;
-					}
+						&.columns-0 {
+							grid-template-columns: auto;
+						}
+						&.columns-3 {
+							grid-template-columns: auto repeat(3, 8px);
+						}
+						&.columns-6 {
+							grid-template-columns: auto repeat(6, 8px);
+						}
+						&.columns-12 {
+							grid-template-columns: repeat(12, 8px);
+							justify-content: center;
+							text-align: center;
+						}
+						&.columns-24 {
+							grid-template-columns: repeat(24, 8px);
+							justify-content: center;
+							text-align: center;
+						}
 
-					& > .potential {
-						grid-column-start: span 4;
-					}
+						&.title {
+							margin-bottom: 3px;
+						}
+						&.title-major {
+							margin-top: 10px;
+						}
 
-					& > .skill,
-					& > .origin {
-						padding-left: 10px;
+						&.logo {
+							height: 100px;
+							width: 100%;
+							margin: 12px auto;
+
+							& > .culture {
+								height: 100px;
+								width: 100%;
+							}
+							& > .concept {
+								height: 100px;
+								width: 100%;
+							}
+							& > .cult {
+								height: 100px;
+								width: 100%;
+							}
+						}
+
+						& > .title-major {
+							font-size: 1.4em;
+							text-align: center;
+						}
+
+						& > .title {
+							background: $color-light-bg;
+							color: $color-black-light;
+							padding: 1px 4px;
+							font-weight: bold;
+
+							&.span-13 {
+								column-span: span 12;
+							}
+							&.span-25 {
+								column-span: span 24;
+							}
+						}
+
+						& > .condition-title {
+							text-align: center;
+						}
+
+						& > .normal {
+							padding-left: 10px;
+						}
 					}
 				}
 			}

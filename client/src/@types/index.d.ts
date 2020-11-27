@@ -21,6 +21,19 @@ type requests = "register" | "login" | "auth";
 type sheettype = "none" | "new" | "edit" | "view";
 type campaigntype = "none" | "new" | "edit" | "view";
 
+interface blockrow {
+	name: string;
+	type: "empty" | "normal" | "title" | "title-major" | "input" | "select" | "condition" | "condition-title" | "logo";
+	checkboxes: 0 | 3 | 6 | 12 | 24;
+	placeholder?: boolean;
+	selectdata?: string[];
+}
+
+interface tabledata {
+	rows: number;
+	columns: string[];
+}
+
 interface registrationform {
 	r_username: string;
 	r_email: string;
@@ -39,5 +52,22 @@ interface entranceprops {
 }
 
 interface charactersheetprops {
+	sheet: "none" | "new" | "edit" | "view";
+}
 
+interface blockprops {
+	datakey: string;
+}
+
+interface selectprops {
+	row: blockrow;
+	onChange: (event: React.ChangeEvent<HTMLSelectElement>, rowName:string) => void;
+}
+
+interface tableprops {
+	datakey: string;
+}
+
+interface dividerprops {
+	children?: string;
 }

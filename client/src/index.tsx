@@ -5,10 +5,7 @@ import "./style.scss";
 
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
-import { AttributeBlocks } from "./parts/AttributeBlocks";
-import { OriginsBlock } from "./parts/OriginsBlock";
-import { PotentialsBlock } from "./parts/PotentialsBlock";
-import { ConditionBlock } from "./parts/ConditionBlock";
+import { CharacterSheet } from "./components/CharacterSheet";
 
 function App(): JSX.Element {
 	const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -85,52 +82,7 @@ function App(): JSX.Element {
 					</div>
 
 					{(sheet !== "none")
-						? <div className="character-sheet" onLoad={() => { if (sheet === "edit") { /* TODO: Do editing load */ } }}>
-							<hr />
-
-							<input className="basic-text" type="text" id="c_name" name="c_name" placeholder="Name"></input>
-							<input className="basic-text" type="text" id="c_rank" name="c_rank" placeholder="Rank"></input>
-							<input className="basic-text-mini" type="text" id="c_age" name="c_age" placeholder="Age"></input>
-							<input className="basic-text-mini" type="text" id="c_weight" name="c_weight" placeholder="Weight"></input>
-							<input className="basic-text-mini" type="text" id="c_height" name="c_height" placeholder="Height"></input>
-							<input className="basic-text-mini" type="text" id="c_sex" name="c_sex" placeholder="Sex"></input>
-							<input className="basic-text-mini" type="text" id="c_exp" name="c_exp" placeholder="Experience"></input>
-
-							<hr />
-
-							<div className="culture">
-								<div className="title">CULTURE</div>
-								<div className="logo"></div>
-								<input type="text" id="c_culture" name="c_culture" placeholder="Culture"></input>
-							</div>
-
-							<div className="concept">
-								<div className="title">CONCEPT</div>
-								<div className="logo"></div>
-								<input type="text" id="c_concept" name="c_concept" placeholder="Concept"></input>
-							</div>
-
-							<div className="cult">
-								<div className="title">CULT</div>
-								<div className="logo"></div>
-								<input type="text" id="c_cult" name="c_cult" placeholder="Cult"></input>
-							</div>
-
-							<hr />
-
-							{AttributeBlocks()}
-
-							<hr />
-
-							{OriginsBlock()}
-
-							{ConditionBlock()}
-
-							{PotentialsBlock()}
-
-							<hr />
-
-						</div>
+						? <CharacterSheet sheet={sheet} />
 						: null
 					}
 
