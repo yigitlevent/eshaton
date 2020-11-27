@@ -55,6 +55,9 @@ input[type="password"] {
 input[type="button"],
 input[type="submit"] {
 	cursor: pointer;
+	border: none;
+	background: $color-form;
+	color: $color-text;
 }
 
 input[type="checkbox"] {
@@ -140,10 +143,7 @@ select {
 				}
 
 				& > form > .input-button {
-					display: block;
-					border: none;
-					background: $color-form;
-					color: $color-text;
+					display: block;	
 					font-size: 1em;
 					margin: 2px auto;
 					padding: 4px 6px 2px;

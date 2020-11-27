@@ -27,10 +27,10 @@ export function CharacterSheet({ sheet }: charactersheetprops): JSX.Element {
 
 	return (
 		<form ref={ref} className="character-sheet" onLoad={() => { if (sheet === "edit") { /* TODO: Do editing load */ } }}>
+			<input className="extra" type="submit" id="c_submit" name="c_submit" value="Save Character" onClick={(event) => { submit(event); }} />
 			<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" />
 			<div className="extra id">{`ID: ##########`}</div>
 			<div className="extra player">{`Player: ##########`}</div>
-			<input className="extra" type="submit" id="c_submit" name="c_submit" value="Save Character" onClick={(event) => { submit(event); }} />
 
 			<Divider>{`ARCHETYPE`}</Divider>
 			<div className="wrapper">
