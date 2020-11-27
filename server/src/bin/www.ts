@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 export const pool = new Pool({
 	connectionString: DATABASE_URL,
-	ssl: PRODUCTION
+	ssl: (PRODUCTION) ? { rejectUnauthorized: false } : false
 });
 
 pool.on("error", (err: Error) => {
