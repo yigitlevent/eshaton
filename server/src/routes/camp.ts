@@ -14,7 +14,9 @@ router.post("/new",
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
-		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Campaign creation failed.", errors: errors }); };
+		if (!errors.isEmpty()) {
+			return response.status(400).json({ status: "failure", message: "Campaign creation failed.", errors: errors.array() });
+		}
 
 		const access_token: string = request.cookies["access_token"];
 		const decoded: any = await jwt.decode(access_token, { complete: true });

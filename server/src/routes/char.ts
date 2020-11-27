@@ -17,7 +17,7 @@ router.post("/new",
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
-		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Character creation failed.", errors: errors }); };
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Character creation failed.", errors: errors.array() }); };
 
 		const access_token: string = request.cookies["access_token"];
 
@@ -64,7 +64,7 @@ router.post("/list",
 	[],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
-		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Character listing failed.", errors: errors }); };
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Character listing failed.", errors: errors.array() }); };
 
 		const access_token: string = request.cookies["access_token"];
 

@@ -24,7 +24,7 @@ router.post("/register",
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
 			if (!PRODUCTION) { output(errors); };
-			return response.status(400).json({ status: "failure", message: "Registration failed.", errors: errors });
+			return response.status(400).json({ status: "failure", message: "Registration failed.", errors: errors.array() });
 		}
 
 		const { r_username, r_email, r_password } = request.body;
@@ -61,7 +61,7 @@ router.post("/login",
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
 			if (!PRODUCTION) { output(errors); };
-			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors });
+			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors.array() });
 		}
 
 		const { l_username, l_password } = request.body;
@@ -119,7 +119,7 @@ router.post("/auth",
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) {
 			if (!PRODUCTION) { output(errors); };
-			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors });
+			return response.status(400).json({ status: "failure", message: "Login unsuccessful.", errors: errors.array() });
 		}
 
 		const access_token: string = request.cookies["access_token"];
@@ -159,7 +159,7 @@ router.post("/auth",
 	[],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
-		if (!errors.isEmpty()) { return response.status(400).json({ errors: errors }); }
+		if (!errors.isEmpty()) { return response.status(400).json({ errors: errors.array() }); }
 
 		try {
 			response.status(200).clearCookie("access_token").send({ status: "success", message: "Logged out succesfully." });

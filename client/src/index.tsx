@@ -46,11 +46,16 @@ function App(): JSX.Element {
 				if (response.status === "failure") {
 					if (requestType !== "auth") {
 						let errorMsg = [];
-						if (response.errors) { errorMsg = response.errors.map((error: any) => { return (error.msg); }); }
+
+						if (response.errors) {
+							errorMsg.push(...(response.errors.map((error: any) => { return (error.msg); })));
+						}
+
 						if (response.error) {
 							let det = response.error.detail.replace(/\=/g, ' ').replace(/\(|\)/g, '').substring(4);
 							errorMsg.push(det.charAt(0).toUpperCase() + det.slice(1));
 						}
+
 						toast.error(errorMsg.join(" "), notificationOptions as ToastOptions);
 					}
 				}
