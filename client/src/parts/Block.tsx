@@ -46,7 +46,7 @@ const BLOCKS: { [key: string]: blockrow[]; } = {
 	"concept": [
 		{ name: "Concept", type: "title-major", checkboxes: 0 },
 		{ name: "concept-icon", type: "logo", checkboxes: 0 },
-		{ name: "concepts-select", type: "select", checkboxes: 0, selectdata: ["0. The Advanturer", "I. The Creator", "II. The Mentor", "III. The Martyr", "IV. The Ruler", "V. The Seeker", "VI. The Healer", "VII. The Traditionalist", "VIII. The Mediator", "IX. The Hermit", "X. The Heretic", "XI. The Conqueror", "XII. The Abomination", "XIII. Destroyer", "XIV. The Chosen", "XV. The Defiler", "XVI. The Protector", "XVII. The Visionary", "XVIII. The Zealot", "XIX. The Disciple", "XX. The Righteous", "XXI. The Traveller"] }
+		{ name: "concepts-select", type: "select", checkboxes: 0, selectdata: ["0. The Adventurer", "I. The Creator", "II. The Mentor", "III. The Martyr", "IV. The Ruler", "V. The Seeker", "VI. The Healer", "VII. The Traditionalist", "VIII. The Mediator", "IX. The Hermit", "X. The Heretic", "XI. The Conqueror", "XII. The Abomination", "XIII. Destroyer", "XIV. The Chosen", "XV. The Defiler", "XVI. The Protector", "XVII. The Visionary", "XVIII. The Zealot", "XIX. The Disciple", "XX. The Righteous", "XXI. The Traveller"] }
 	],
 	"cult": [
 		{ name: "Cult", type: "title-major", checkboxes: 0 },
@@ -177,8 +177,8 @@ export function Block({ datakey }: blockprops): JSX.Element {
 	const [imgSrc, setImgSrc] = useState(`./assets/icons/empty.svg`);
 
 	const selectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => {
-		//@ts-ignore
-		setImgSrc(`./assets/icons/${rowName.split("-")[0]}/${event.target.value}.svg`);
+		if (event.target.value === "") { setImgSrc(`./assets/icons/empty.svg`); }
+		else { setImgSrc(`./assets/icons/${rowName.split("-")[0]}/${event.target.value}.svg`); }
 	};
 
 	const BLOCKDATA = BLOCKS[datakey];
@@ -238,8 +238,7 @@ export function Block({ datakey }: blockprops): JSX.Element {
 
 	useEffect(() => {
 		if (imgRef && imgRef.current) {
-			//@ts-ignore
-			imgRef.current.src = imgSrc;
+			(imgRef as React.MutableRefObject<HTMLImageElement>).current.src = imgSrc;
 		}
 	}, [imgRef, imgSrc]);
 

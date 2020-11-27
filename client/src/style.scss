@@ -71,9 +71,14 @@ input[type="checkbox"] {
 }
 
 select {
-	background: $color-form;
-	color: $color-text;
+	background: #333333;
+	color: #cccccc;
 	border: none;
+	text-align: center;
+	padding: width;
+	width: 50%;
+	margin: 0 auto;
+	appearance: none;
 }
 
 .divider {
