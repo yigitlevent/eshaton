@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { DATABASE_URL, PRODUCTION, SECRET_KEY } from "../app";
-import { getDateTime } from "../middleware/datetime";
+import { getDateTime } from "../shared/datetime";
 import { pool } from "../bin/www";
 import { output } from "../shared/output";
 

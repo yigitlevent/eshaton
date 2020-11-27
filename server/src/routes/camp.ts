@@ -2,7 +2,7 @@ import express from "express";
 import { check, ValidationError, Result, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import { getDateTime } from "../middleware/datetime";
+import { getDateTime } from "../shared/datetime";
 import { pool } from "../bin/www";
 
 export const router = express.Router();

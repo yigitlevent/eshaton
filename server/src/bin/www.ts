@@ -25,7 +25,7 @@ pool.on("error", (err: Error) => {
 
 connect();
 
-server.listen((PORT as number), "localhost");
+server.listen((PORT as number), HOST);
 server.on("error", onError);
 server.on("listening", onListening);
 
