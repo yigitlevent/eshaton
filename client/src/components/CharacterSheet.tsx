@@ -36,7 +36,7 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 
 	const submitChar = (event: React.FormEvent<HTMLInputElement>) => {
 		event.preventDefault();
-		userRequest("/char/new", "add_char", getData());
+		userRequest("/char/new", "new_char", getData());
 	};
 
 	const exportChar = (event: React.FormEvent<HTMLInputElement>) => {

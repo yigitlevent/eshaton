@@ -24,6 +24,7 @@ export async function connect() {
 			creator VARCHAR(32) NOT NULL,
 			secretkey CHAR(32) UNIQUE NOT NULL,
 			characters VARCHAR[],
+			characters_name VARCHAR[],
 			created TIMESTAMP DEFAULT NULL
 		)`)
 		.then((res: QueryResult<any>) => { output("Table 'campaigns' created.", "yellow"); })
@@ -37,6 +38,7 @@ export async function connect() {
 			secretkey CHAR(32) UNIQUE NOT NULL,
 			data TEXT NOT NULL,
 			campaign VARCHAR(32),
+			campaign_name VARCHAR(32),
 			created TIMESTAMP DEFAULT NULL
 		)`)
 		.then((res: QueryResult<any>) => { output("Table 'characters' created.", "yellow"); })

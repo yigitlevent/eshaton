@@ -104,6 +104,55 @@ router.post("/list",
 	}
 );
 
+router.post("/add",
+	[
+		check("char_key", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("camp_key", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+	],
+	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Errors.", errors: errors.array() }); };
+
+		const access_token: string = request.cookies["access_token"];
+
+		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { char_key, camp_key } = request.body;
+
+			let char_name = "";
+			let camp_name = "";
+
+			await client.query(
+				"(SELECT name FROM characters WHERE secretkey = $1) UNION ALL (SELECT name FROM campaigns WHERE secretkey = $2)",
+				[char_key, camp_key])
+				.then((results) => {
+					char_name = results.rows[0].name;
+					camp_name = results.rows[1].name;
+				});
+
+			await client.query(
+				"UPDATE campaigns SET (characters, characters_name) = (array_append(characters, $1), array_append(characters_name, $2)) WHERE secretkey = $3",
+				[char_key, char_name, camp_key]);
+
+			await client.query(
+				"UPDATE characters SET (campaign, campaign_name) = ($1, $2) WHERE secretkey = $3",
+				[camp_key, camp_name, char_key]);
+
+			return response.status(201).json({ status: "success", message: "Connection created." });
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request. " });
+		}
+		finally {
+			client.release();
+		}
+	}
+);
+
 router.post("/get",
 	[
 		check("c_secretkey", "Invalid key. ").trim().escape().not().isEmpty(),

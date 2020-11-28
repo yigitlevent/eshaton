@@ -155,12 +155,11 @@ router.post("/auth",
 	}
 );
 
-/*router.post("/logout",
+router.post("/logout",
 	[],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) { return response.status(400).json({ errors: errors.array() }); }
-
 		try {
 			response.status(200).clearCookie("access_token").send({ status: "success", message: "Logged out succesfully." });
 		}
@@ -169,4 +168,4 @@ router.post("/auth",
 			response.status(500).clearCookie("access_token").json({ status: "failure", message: "Server error." });
 		}
 	}
-);*/
+);

@@ -17,7 +17,6 @@ function App(): JSX.Element {
 	const [isLogin, setIsLogin] = useState(true);
 
 	const [display, setDisplay] = useState("none" as displayelement);
-	const [displaying, setDisplaying] = useState({} as JSX.Element);
 	const [displayType, setDisplayType] = useState("none" as displaytype);
 
 	const [charRows, setCharRows] = useState([] as any[]);
@@ -55,6 +54,8 @@ function App(): JSX.Element {
 					if (requestType !== "auth") {
 						let errorMsg = [];
 
+						errorMsg.push(response.message);
+
 						if (response.errors) {
 							errorMsg.push(...(response.errors.map((error: any) => { return (error.msg); })));
 						}
@@ -77,7 +78,11 @@ function App(): JSX.Element {
 						toast.success(response.message);
 						setIsLogin(true);
 					}
-					else if (requestType === "add_char" || requestType === "add_camp") {
+					else if (requestType === "new_char" || requestType === "new_camp") {
+						toast.success(response.message);
+						refreshLists();
+					}
+					else if (requestType === "add_connection" || requestType === "remove_connection") {
 						toast.success(response.message);
 						refreshLists();
 					}
@@ -89,6 +94,10 @@ function App(): JSX.Element {
 						setCampRows(response.rows);
 						// toast.success(response.message);
 					}
+					else if (requestType === "logout") {
+						toast.success(response.message);
+						setIsLoggedIn(false);
+					}
 				}
 			}
 		};
@@ -97,38 +106,16 @@ function App(): JSX.Element {
 	const startAuth = useCallback(() => { userRequest("/user/auth", "auth"); }, [userRequest]);
 
 	const charRowElements = charRows.map(
-		(row) => { return <ListRow row={row} dt={row.created.split("T")} type={"character"} setDisplay={setDisplay} setLastKey={setLastCharKey} setLastData={setLastCharData} />; }
+		(row) => { return <ListRow row={row} dt={row.created.split("T")} type={"Add"} setDisplay={setDisplay} setLastKey={setLastCharKey} setLastData={setLastCharData} />; }
 	);
 
 	const campRowElements = campRows.map(
-		(row) => { return <ListRow row={row} dt={row.created.split("T")} type={"campaign"} setDisplay={setDisplay} setLastKey={setLastCampKey} setLastData={setLastCampData} />; }
+		(row) => { return <ListRow row={row} dt={row.created.split("T")} type={"Remove"} setDisplay={setDisplay} setLastKey={setLastCampKey} setLastData={setLastCampData} />; }
 	);
-
-	const checkDisplaying = useCallback(() => {
-		switch (display) {
-			case "character":
-				return <CharacterSheet type={displayType} close={close} userRequest={userRequest} />;
-			case "campaign":
-				return <CampaignSheet type={displayType} close={close} userRequest={userRequest} />;
-			case "add_to_campaign":
-				return <Mini title="Add a Character to Campaign" label="Character Key" camp_key={lastCampKey} rType="add" close={close} userRequest={userRequest} />;
-			case "remove_from_campaign":
-				return <Mini title="Remove a Character from Campaign" label="Character Name" camp_key={lastCampKey} rType="remove" close={close} userRequest={userRequest} />;
-			case "add_to_character":
-				return <Mini title="Add Character to a Campaign" label="Campaign Key" char_key={lastCharKey} rType="add" close={close} userRequest={userRequest} />;
-			case "remove_from_character":
-				return <Mini title="Remove Character from Campaign" char_key={lastCharKey} rType="remove" close={close} userRequest={userRequest} />;
-			default:
-			case "none":
-				return <Fragment />;
-		}
-	}, [display, displayType, lastCampKey, lastCharKey, userRequest]);
 
 	useEffect(() => {
 		if (!isLoggedIn) { startAuth(); }
-
-		setDisplaying(checkDisplaying());
-	}, [lastCampKey, lastCharKey, charRows, campRows, isLoggedIn, checkDisplaying, startAuth]);
+	}, [isLoggedIn, startAuth]);
 
 	return (
 		<StrictMode>
@@ -162,6 +149,7 @@ function App(): JSX.Element {
 					<div className="dashboard">
 						<div className="logo" />
 						<div className="title">ESHATON // DASHBOARD</div>
+						<input className="logout" type="button" onClick={() => { userRequest("/user/logout", "logout"); }} value="Logout" />
 
 						<div className="my-characters">
 							<div className="title">MY CHARACTERS</div>
@@ -180,7 +168,21 @@ function App(): JSX.Element {
 						</div>
 					</div>
 
-					{displaying}
+					{(display === "character")
+						? <CharacterSheet type={displayType} close={close} userRequest={userRequest} />
+						: null}
+
+					{(display === "campaign")
+						? <CampaignSheet type={displayType} close={close} userRequest={userRequest} />
+						: null}
+
+					{(display === "add_connection")
+						? <Mini label="Campaign Key" rType="Add" char_key={lastCharKey} close={close} userRequest={userRequest} />
+						: null}
+
+					{(display === "remove_connection")
+						? <Mini label="Character Name" rType="Remove" camp_key={lastCampKey} close={close} userRequest={userRequest} />
+						: null}
 				</div>
 			}
 		</StrictMode>

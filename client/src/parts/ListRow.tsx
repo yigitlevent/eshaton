@@ -9,13 +9,10 @@ export function ListRow({ row, dt, type, setDisplay, setLastKey, setLastData }: 
 			<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${row.secretkey}`); }} value="" />
 
 			<span className="name">{row.name}</span>
-			<span className="other">{row.campaign}</span>
+			{/*<span className="other">{(row.campaign_name) ? row.campaign_name : (row.characters_name) ? row.characters_name.join(", ") : ""}</span>*/}
 
-			<input className="button add" title="Add Character to Campaign" type="button"
-				onClick={() => { setDisplay(`add_to_${type}` as displayelement); setLastKey(row.secretkey); }} value=""
-			/>
-			<input className="button remove" title="Remove Character from Campaign" type="button"
-				onClick={() => { setDisplay(`remove_from_${type}` as displayelement); setLastKey(row.secretkey); }} value=""
+			<input className={`button ${type.toLowerCase()}`} title={`${type} Character ${(type === "Add") ? "to" : "from"} Campaign`} type="button"
+				onClick={() => { setDisplay(`${type.toLowerCase()}_connection` as displayelement); setLastKey(row.secretkey); }} value=""
 			/>
 
 			<div />

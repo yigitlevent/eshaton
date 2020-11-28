@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Divider } from "../parts/Divider";
 
-export function Mini({ title, label, char_key, camp_key, rType, close, userRequest }: miniprops): JSX.Element {
+export function Mini({ label, rType, char_key, camp_key, close, userRequest }: miniprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 
 	const getData = () => {
@@ -37,20 +37,22 @@ export function Mini({ title, label, char_key, camp_key, rType, close, userReque
 		}
 		delete data["key"];
 
-		/*userRequest(
-			(rType === "add") ? "/shared/add" : "/shared/remove",
-			(rType === "add") ? "add_char_to" : "remove_char_from",
+		userRequest(
+			(rType === "Add") ? "/char/add" : "/camp/remove",
+			(rType === "Add") ? "add_connection" : "remove_connection",
 			data
-		);*/
+		);
 	};
 
 	return (
 		<form ref={ref} className="mini">
-			<Divider>{title}</Divider>
+			<Divider>{`${rType} Character ${(rType === "Add") ? "to" : "from"} Campaign`}</Divider>
 			<div>
-				<label style={{ display: (label) ? "initial" : "none" }}>{label}:</label>
-				<input className="key" id="key" name="key" type="text" style={{ display: (label) ? "initial" : "none" }} />
-				<input className="button" id="submit" name="submit" type="submit" onClick={(event) => { submitMini(event); }} value={(rType === "add") ? "Add" : "Remove"} />
+				<div>For: {(char_key) ? char_key : camp_key}</div>
+				<br />
+				<label>{label}:</label>
+				<input className="key" id="key" name="key" type="text" />
+				<input className="button" id="submit" name="submit" type="submit" onClick={(event) => { submitMini(event); }} value={rType} />
 				<input className="button" id="close" name="close" type="button" onClick={close} value="Close" />
 			</div>
 		</form>

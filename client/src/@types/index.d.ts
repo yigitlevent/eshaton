@@ -18,10 +18,12 @@ interface coordinate {
 }
 
 type displaytype = "none" | "new" | "edit" | "view";
-type displayelement = "none" | "character" | "campaign" | "add_to_campaign" | "remove_from_campaign" | "add_to_character" | "remove_from_character";
-type requests = "register" | "login" | "auth" | "add_char" | "list_char" | "add_camp" | "list_camp"
-	| "get_char" | "get_camp" | "edit_char" | "edit_camp" | "remove_char" | "remove_camp"
-	| "add_char_to" | "remove_char_from";
+type displayelement = "none" | "character" | "campaign" | "add_connection" | "remove_connection";
+
+type requests = "register" | "login" | "auth" | "logout" | "add_connection" | "remove_connection"
+	//	CH CA		 CH CA			X X			X X				X X
+	| "new_char" | "list_char" | "get_char" | "edit_char" | "remove_char"
+	| "new_camp" | "list_camp" | "get_camp" | "edit_camp" | "remove_camp";
 
 interface blockrow {
 	name: string;
@@ -66,18 +68,17 @@ interface blockprops {
 interface listrowprops {
 	row: any;
 	dt: any;
-	type: "character" | "campaign";
+	type: "Add" | "Remove";
 	setDisplay: (value: React.SetStateAction<displayelement>) => void;
 	setLastKey: (value: React.SetStateAction<string>) => void;
 	setLastData: (value: any) => void;
 }
 
 interface miniprops {
-	title: string;
-	label?: string;
+	label: string;
+	rType: "Add" | "Remove";
 	char_key?: string;
 	camp_key?: string;
-	rType: "add" | "remove";
 	close: () => void;
 	userRequest: (path: string, requestType: requests, data?: any) => void;
 }

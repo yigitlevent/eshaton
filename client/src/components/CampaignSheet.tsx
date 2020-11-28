@@ -30,7 +30,7 @@ export function CampaignSheet({ type, close, userRequest }: sheetprops): JSX.Ele
 
 	const submitCamp = (event: React.FormEvent<HTMLInputElement>) => {
 		event.preventDefault();
-		userRequest("/camp/new", "add_camp", getData());
+		userRequest("/camp/new", "new_camp", getData());
 	};
 
 	return (

@@ -233,6 +233,13 @@ select {
 				text-align: center;
 			}
 
+			& > .logout {
+				position: relative;
+				top: -130px;
+				right: -513px;
+				padding: 1px 5px;
+			}
+
 			& > .menu {
 				margin: 4px auto;
 				width: max-content;
@@ -274,7 +281,7 @@ select {
 						margin: 2px 0;
 						display: grid;
 						grid-template-rows: 20px;
-						grid-template-columns: 20px 20px auto auto 20px 20px 20px 20px 20px 20px;
+						grid-template-columns: 20px 20px auto 20px 20px 20px 20px 20px;
 						gap: 5px;
 						background: $color-row;
 
