@@ -17,9 +17,11 @@ interface coordinate {
 	y: number;
 }
 
-type requests = "register" | "login" | "auth" | "add_char" | "list_char" | "get_char" | "add_camp" | "list_camp" | "get_camp";
-type sheettype = "none" | "new" | "edit" | "view";
-type campaigntype = "none" | "new" | "edit" | "view";
+type displaytype = "none" | "new" | "edit" | "view";
+type displayelement = "none" | "character" | "campaign" | "add_to_campaign" | "remove_from_campaign" | "add_to_character" | "remove_from_character";
+type requests = "register" | "login" | "auth" | "add_char" | "list_char" | "add_camp" | "list_camp"
+	| "get_char" | "get_camp" | "edit_char" | "edit_camp" | "remove_char" | "remove_camp"
+	| "add_char_to" | "remove_char_from";
 
 interface blockrow {
 	name: string;
@@ -51,13 +53,33 @@ interface entranceprops {
 	userRequest: (path: string, requestType: requests, data?: registrationform | loginform) => void;
 }
 
-interface charactersheetprops {
-	sheet: "none" | "new" | "edit" | "view";
+interface sheetprops {
+	close: () => void;
+	type: "none" | "new" | "edit" | "view";
 	userRequest: (path: string, requestType: requests, data?: any) => void;
 }
 
 interface blockprops {
 	datakey: string;
+}
+
+interface listrowprops {
+	row: any;
+	dt: any;
+	type: "character" | "campaign";
+	setDisplay: (value: React.SetStateAction<displayelement>) => void;
+	setLastKey: (value: React.SetStateAction<string>) => void;
+	setLastData: (value: any) => void;
+}
+
+interface miniprops {
+	title: string;
+	label?: string;
+	char_key?: string;
+	camp_key?: string;
+	rType: "add" | "remove";
+	close: () => void;
+	userRequest: (path: string, requestType: requests, data?: any) => void;
 }
 
 interface selectprops {

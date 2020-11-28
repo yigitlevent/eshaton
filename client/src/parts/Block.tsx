@@ -183,6 +183,36 @@ export function Block({ datakey }: blockprops): JSX.Element {
 		else { setImgSrc(`./assets/icons/${rowName}s/${event.target.value}.svg`); }
 	};
 
+	const checkboxPropogation = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+		let element: HTMLInputElement = (event.target as HTMLInputElement);
+		let isPrev = element.previousElementSibling?.classList.contains("checkbox") === true;
+		// let isPrevChecked = (isNext) ? (element.previousElementSibling as HTMLInputElement).checked : false;
+		let isNext = element.nextElementSibling?.classList.contains("checkbox") === true;
+		let isNextChecked = (isNext) ? (element.nextElementSibling as HTMLInputElement).checked : false;
+
+		if (!element.checked && !isPrev && isNext && !isNextChecked) {
+			element.checked = false;
+		}
+		else if (element.checked && isPrev) {
+			element.checked = true;
+			while (element.previousElementSibling && isPrev) {
+				element = element.previousElementSibling as HTMLInputElement;
+				element.checked = true;
+			}
+		}
+		else {
+			element.checked = true;
+			while (element.nextElementSibling && isNext) {
+				element = element.nextElementSibling as HTMLInputElement;
+				element.checked = false;
+			}
+		}
+	};
+
+	useEffect(() => {
+		
+	}, [])
+
 	const BLOCKDATA = BLOCKS[datakey];
 	const items = BLOCKDATA.map(
 		(row) => {
@@ -196,6 +226,7 @@ export function Block({ datakey }: blockprops): JSX.Element {
 						className="checkbox"
 						id={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
 						name={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
+						onClick={checkboxPropogation}
 					/>
 				);
 			}

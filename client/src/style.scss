@@ -1,9 +1,11 @@
+$color-yellow: #deec1e !default;
 $color-green: #1eec26 !default;
 $color-red: #ec1e26 !default;
 $color-black: #000000 !default;
 $color-black-light: #111111 !default;
 $color-white: #ffffff !default;
 $color-form: #333333 !default;
+$color-row: #212121 !default;
 $color-light-bg: #aaaaaa !default;
 
 $color-text: #cccccc !default;
@@ -17,6 +19,10 @@ $color-text-redder: #aa2626 !default;
 .Toastify__toast--success {
 	background: $color-form !important;
 	border: 1px $color-green solid;
+}
+.Toastify__toast--info {
+	background: $color-form !important;
+	border: 1px $color-yellow solid;
 }
 
 @font-face {
@@ -45,7 +51,7 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-	height: 100%;
+	height: auto;
 	width: 100%;
 	background-color: $color-black;
 }
@@ -118,13 +124,13 @@ select {
 }
 
 #root {
-	height: 100%;
+	height: auto;
 	width: 100%;
 	background: $color-black;
 
 	& > .entrance-wrapper {
 		width: 100%;
-		height: 100%;
+		height: auto;
 
 		& > .entrance {
 			width: 400px;
@@ -185,14 +191,37 @@ select {
 
 	& > .main-wrapper {
 		width: 100%;
-		height: 100%;
+		height: auto;
 
-		& > .dashboard {
+		& > .dashboard,
+		& > .mini {
 			max-width: 600px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
-			background: $color-black-light;
-			border: 1px $color-red solid;
+			background: #111;
+			border: 1px solid #ec1e26;
+		}
+
+		& > .mini > div {
+			margin: 0 auto;
+			width: max-content;
+
+			& > label {
+				display: inline-block;
+				min-width: 100px;
+				margin: 2px;
+			}
+			& > input {
+				display: inline-block;
+				min-width: 70px;
+				margin: 2px;
+			}
+		}
+
+		& > .dashboard {
+			@media only screen and (max-width: 690px) {
+				margin: 0 auto;
+			}
 
 			& > .logo {
 				background: $color-black-light url("./assets/icons/degenesis.svg") no-repeat center center;
@@ -214,7 +243,7 @@ select {
 			& > .my-campaigns {
 				min-height: 40px;
 				width: 100%;
-				margin-top: 10px;
+				margin: 18px 0;
 
 				& > .title {
 					font-size: 1.4em;
@@ -237,11 +266,66 @@ select {
 
 				& > .list {
 					font-size: 1em;
+
+					& > .row {
+						width: 100%;
+						height: 27px;
+						padding: 3px 4px;
+						margin: 2px 0;
+						display: grid;
+						grid-template-rows: 20px;
+						grid-template-columns: 20px 20px auto auto 20px 20px 20px 20px 20px 20px;
+						gap: 5px;
+						background: $color-row;
+
+						&:nth-child(2n) {
+							background: darken($color-row, 3%);
+						}
+
+						& > .name {
+							font-size: 1.2em;
+						}
+
+						& > .button {
+							height: 20px;
+							width: 20px;
+							filter: invert(80%);
+							background-size: 20px 20px !important;
+						}
+
+						& > .created {
+							background: transparent url("./assets/icons/time.svg") no-repeat center center;
+						}
+						& > .secretkey {
+							background: transparent url("./assets/icons/key.svg") no-repeat center center;
+						}
+						& > .view {
+							background: transparent url("./assets/icons/view.svg") no-repeat center center;
+						}
+						& > .edit {
+							background: transparent url("./assets/icons/edit.svg") no-repeat center center;
+						}
+						& > .delete {
+							background: transparent url("./assets/icons/delete.svg") no-repeat center center;
+						}
+						& > .add {
+							background: transparent url("./assets/icons/add.svg") no-repeat center center;
+						}
+						& > .remove {
+							background: transparent url("./assets/icons/remove.svg") no-repeat center center;
+						}
+
+						& > .creator,
+						& > .data {
+							display: none;
+						}
+					}
 				}
 			}
 		}
 
-		& > .character-sheet {
+		& > .character-sheet,
+		& > .campaign-sheet {
 			max-width: 900px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
@@ -307,11 +391,8 @@ select {
 
 					&.columns-2 {
 						grid-template-columns: auto 50px;
-						flex: 1 1 270px;
-
-						&:not(:first-child) {
-							margin-left: 17px;
-						}
+						flex: 1 1 250px;
+						margin: 16px 10px;
 					}
 					&.columns-4 {
 						grid-template-columns: auto 100px auto 100px;
