@@ -23,7 +23,6 @@ router.post("/new",
 
 		try {
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
-
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
 			const _username: string = decoded.username;
@@ -70,7 +69,6 @@ router.post("/list",
 
 		try {
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
-
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
 			const _username: string = decoded.username;
@@ -116,7 +114,6 @@ router.post("/add",
 		const access_token: string = request.cookies["access_token"];
 
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
-
 		try {
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }

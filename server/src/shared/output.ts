@@ -30,7 +30,7 @@ const colors = {
 	}
 };
 
-export function output(text: string | any, color?: color, bgcolor?: color) {
+export function output(text: string | any, color?: color, bgcolor?: color): void {
 	if (typeof text === "string") {
 		if (bgcolor && color) console.log(colors.bg[bgcolor] + colors.tx[color], text);
 		else if (bgcolor) console.log(colors.bg[bgcolor], text);

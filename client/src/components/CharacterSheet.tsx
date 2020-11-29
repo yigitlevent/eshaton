@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { Divider } from "../parts/Divider";
 import { Block } from "../parts/Block";
 import { Table } from "../parts/Table";
-import { generate } from "../shared/generate";
+import { generateNumString } from "../shared/generateNumString";
 
 export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 	const importRef = useRef({} as HTMLInputElement);
 
-	const getData = () => {
+	const getData = (): { c_name: string, c_secretkey: string, c_data: string; } => {
 		let testObject: { [key: string]: string | boolean; } = {};
 
 		for (let i = 0; i < ref.current.length; i++) {
@@ -29,17 +29,17 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 
 		return {
 			c_name: (testObject.c_name as string),
-			c_secretkey: testObject.c_character_id,
+			c_secretkey: (testObject.c_character_id as string),
 			c_data: JSON.stringify(testObject)
 		};
 	};
 
-	const submitChar = (event: React.FormEvent<HTMLInputElement>) => {
+	const submitChar = (event: React.FormEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		userRequest("/char/new", "new_char", getData());
 	};
 
-	const exportChar = (event: React.FormEvent<HTMLInputElement>) => {
+	const exportChar = (event: React.FormEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 
 		let data = getData();
@@ -55,11 +55,11 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 		else { toast.error("Please enter a valid character name."); }
 	};
 
-	const importTrigger = () => {
+	const importTrigger = (): void => {
 		importRef.current.click();
 	};
 
-	const importChar = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const importChar = (event: React.ChangeEvent<HTMLInputElement>): void => {
 		let file = new FileReader();
 		file.readAsText((event.target.files as FileList)[0], "UTF-8");
 
@@ -69,7 +69,7 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 		});
 	};
 
-	const loadChar = (data: any) => {
+	const loadChar = (data: any): void => {
 		for (let key in data) {
 			let el = document.querySelector(`#${key}`);
 
@@ -90,7 +90,7 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 		<form ref={ref} className="character-sheet">
 			<div className="extras">
 				<label className="extra label">Character ID: </label>
-				<input className="extra id" id="c_character_id" name="c_character_id" value={generate(32)} readOnly />
+				<input className="extra id" id="c_character_id" name="c_character_id" value={generateNumString(32)} readOnly />
 				<label className="extra label">Campaign ID: </label>
 				<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" readOnly />
 

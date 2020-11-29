@@ -25,6 +25,41 @@ $color-text-redder: #aa2626 !default;
 	border: 1px $color-yellow solid;
 }
 
+@keyframes spin {
+	100% {
+		transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-o-keyframes spin {
+	100% {
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-ms-keyframes spin {
+	100% {
+		-ms-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-webkit-keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-moz-keyframes spin {
+	100% {
+		-moz-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
 @font-face {
 	font-family: "Avenir";
 	src: url("./assets/fonts/Avenir-Light.otf");
@@ -127,6 +162,28 @@ select {
 	height: auto;
 	width: 100%;
 	background: $color-black;
+
+	& > .spinner-wrapper {
+		width: 100%;
+		height: 49px;
+		text-align: center;
+		margin: 20px auto;
+
+		& > .spinner {
+			width: 49px;
+			height: 49px;
+			margin: 0 auto;
+			border: 3px solid rgb(236, 30, 36);
+			border-radius: 50%;
+			border-left-color: transparent;
+			border-right-color: transparent;
+			animation: spin 575ms infinite linear;
+			-o-animation: spin 575ms infinite linear;
+			-ms-animation: spin 575ms infinite linear;
+			-webkit-animation: spin 575ms infinite linear;
+			-moz-animation: spin 575ms infinite linear;
+		}
+	}
 
 	& > .entrance-wrapper {
 		width: 100%;

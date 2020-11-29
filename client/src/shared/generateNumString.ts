@@ -1,8 +1,8 @@
-export function generate(n: number): string {
+export function generateNumString(n: number): string {
 	let add = 1;
 	let max = 12 - add;   // 12 is the min safe number Math.random() can generate without it starting to pad the end with zeros.   
 
-	if (n > max) { return generate(max) + generate(n - max); }
+	if (n > max) { return generateNumString(max) + generateNumString(n - max); }
 
 	max = Math.pow(10, n + add);
 	var min = max / 10; // Math.pow(10, n) basically

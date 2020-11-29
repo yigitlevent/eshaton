@@ -3,7 +3,7 @@ import { QueryResult } from "pg";
 import { output } from "../shared/output";
 import { pool } from "../bin/www";
 
-export async function connect() {
+export async function connect(): Promise<void> {
 	const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 
 	client.query(

@@ -3,7 +3,7 @@ import { check, ValidationError, Result, validationResult } from "express-valida
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { DATABASE_URL, PRODUCTION, SECRET_KEY } from "../app";
+import { PRODUCTION, SECRET_KEY } from "../app";
 import { getDateTime } from "../shared/datetime";
 import { pool } from "../bin/www";
 import { output } from "../shared/output";
@@ -30,7 +30,6 @@ router.post("/register",
 		const { r_username, r_email, r_password } = request.body;
 
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
-
 		try {
 			const hashedPassword = await bcrypt.hash(r_password, 10).catch((err: Error) => { throw console.log("Error: 1001"); });
 
@@ -67,7 +66,6 @@ router.post("/login",
 		const { l_username, l_password } = request.body;
 
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
-
 		try {
 			client.query(
 				"SELECT * FROM users WHERE username = ($1)",
@@ -129,7 +127,6 @@ router.post("/auth",
 		const _username: string = decoded.payload.username;
 
 		const client = await pool.connect();
-
 		try {
 			client.query(
 				"SELECT * FROM users WHERE username = $1",
@@ -161,11 +158,11 @@ router.post("/logout",
 		const errors: Result<ValidationError> = validationResult(request);
 		if (!errors.isEmpty()) { return response.status(400).json({ errors: errors.array() }); }
 		try {
-			response.status(200).clearCookie("access_token").send({ status: "success", message: "Logged out succesfully." });
+			return response.status(200).clearCookie("access_token").send({ status: "success", message: "Logged out succesfully." });
 		}
 		catch (e) {
 			console.error(e);
-			response.status(500).clearCookie("access_token").json({ status: "failure", message: "Server error." });
+			return response.status(500).clearCookie("access_token").json({ status: "failure", message: "Server error." });
 		}
 	}
 );

@@ -4,7 +4,7 @@ import { Divider } from "../parts/Divider";
 export function Mini({ label, rType, char_key, camp_key, close, userRequest }: miniprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 
-	const getData = () => {
+	const getData = (): { key: string; } => {
 		let testObject: { [key: string]: string | boolean; } = {};
 
 		for (let i = 0; i < ref.current.length; i++) {
@@ -23,7 +23,7 @@ export function Mini({ label, rType, char_key, camp_key, close, userRequest }: m
 		};
 	};
 
-	const submitMini = (event: React.FormEvent<HTMLInputElement>) => {
+	const submitMini = (event: React.FormEvent<HTMLInputElement>): void => {
 		event.preventDefault();
 		let data: any = getData();
 

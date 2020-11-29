@@ -52,13 +52,13 @@ interface loginform {
 
 interface entranceprops {
 	setIsLogin: (b: boolean) => void;
-	userRequest: (path: string, requestType: requests, data?: registrationform | loginform) => void;
+	userRequest: (path: string, requestType: requests, data?: registrationform | loginform) => Promise<any[] | boolean>;
 }
 
 interface sheetprops {
 	close: () => void;
 	type: "none" | "new" | "edit" | "view";
-	userRequest: (path: string, requestType: requests, data?: any) => void;
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface blockprops {
@@ -80,7 +80,11 @@ interface miniprops {
 	char_key?: string;
 	camp_key?: string;
 	close: () => void;
-	userRequest: (path: string, requestType: requests, data?: any) => void;
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
+}
+
+interface basicprops {
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface selectprops {

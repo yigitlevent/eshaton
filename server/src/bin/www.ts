@@ -20,7 +20,7 @@ export const pool = new Pool({
 	ssl: (PRODUCTION) ? { rejectUnauthorized: false } : false
 });
 
-pool.on("error", (err: Error) => {
+pool.on("error", (err: Error): void => {
 	console.log("idle client error", err.message, err.stack);
 });
 

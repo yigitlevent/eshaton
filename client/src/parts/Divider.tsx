@@ -1,4 +1,4 @@
-export function Divider({ children }: dividerprops) {
+export function Divider({ children }: dividerprops): JSX.Element {
 	return (
 		<div className="divider">
 			<div className="border" />

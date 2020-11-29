@@ -178,12 +178,12 @@ export function Block({ datakey }: blockprops): JSX.Element {
 	const imgRef: React.MutableRefObject<HTMLImageElement> | React.MutableRefObject<null> = useRef(null);
 	const [imgSrc, setImgSrc] = useState(`./assets/icons/empty.svg`);
 
-	const selectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => {
+	const selectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowName: string): void => {
 		if (event.target.value === "") { setImgSrc(`./assets/icons/empty.svg`); }
 		else { setImgSrc(`./assets/icons/${rowName}s/${event.target.value}.svg`); }
 	};
 
-	const checkboxPropogation = (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+	const checkboxPropogation = (event: React.MouseEvent<HTMLInputElement, MouseEvent>): void => {
 		let element: HTMLInputElement = (event.target as HTMLInputElement);
 		let isPrev = element.previousElementSibling?.classList.contains("checkbox") === true;
 		// let isPrevChecked = (isNext) ? (element.previousElementSibling as HTMLInputElement).checked : false;
@@ -208,10 +208,6 @@ export function Block({ datakey }: blockprops): JSX.Element {
 			}
 		}
 	};
-
-	useEffect(() => {
-		
-	}, [])
 
 	const BLOCKDATA = BLOCKS[datakey];
 	const items = BLOCKDATA.map(

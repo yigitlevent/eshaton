@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 export function ListRow({ row, dt, type, setDisplay, setLastKey, setLastData }: listrowprops): JSX.Element {
 	let d = dt[0].split("-");
-
+	
 	return (
 		<div className="row">
 			<span className="button created" title={`Created At: ${dt[1].split(".")[0]} ${d[2]}:${d[1]}:${d[0]}`} />
