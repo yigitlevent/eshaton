@@ -1,4 +1,5 @@
 import { useRef } from "react";
+
 import { Divider } from "../parts/Divider";
 
 export function Mini({ label, rType, char_key, camp_key, close, userRequest }: miniprops): JSX.Element {

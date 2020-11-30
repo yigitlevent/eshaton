@@ -1,12 +1,13 @@
 import { useRef } from "react";
 import { toast } from "react-toastify";
 
+import { generateNumString } from "../shared/generateNumString";
+
 import { Divider } from "../parts/Divider";
 import { Block } from "../parts/Block";
 import { Table } from "../parts/Table";
-import { generateNumString } from "../shared/generateNumString";
 
-export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.Element {
+export function CharacterSheet({ data, type, close, userRequest }: sheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 	const importRef = useRef({} as HTMLInputElement);
 
@@ -93,7 +94,6 @@ export function CharacterSheet({ type, close, userRequest }: sheetprops): JSX.El
 				<input className="extra id" id="c_character_id" name="c_character_id" value={generateNumString(32)} readOnly />
 				<label className="extra label">Campaign ID: </label>
 				<input className="extra campaign-id" id="c_campaign_id" name="c_campaign_id" type="text" placeholder="Enter Campaign ID" readOnly />
-
 				<input type="file" id="c_file" name="c_file" style={{ display: "none" }} onChange={(event) => { importChar(event); }} ref={importRef} accept=".degenesis" multiple={false} />
 
 				<input className="extra" type="button" id="c_close" name="c_close" value="Close" onClick={close} />

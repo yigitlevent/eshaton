@@ -12,11 +12,11 @@ export const router = express.Router();
 
 router.post("/register",
 	[
-		check("r_username", "Username cannot be empty and must be at most 25 characters long. ").trim().escape().isLength({ max: 25 }).not().isEmpty(),
-		check("r_email", "Enter a valid E-mail. ").trim().escape().isEmail().normalizeEmail().not().isEmpty(),
-		check("r_password", "Password must be at least 6 characters. ").trim().escape().isLength({ min: 6 }),
+		check("r_username", "Username cannot be empty and must be at most 25 characters long.").trim().escape().isLength({ max: 25 }).not().isEmpty(),
+		check("r_email", "Enter a valid E-mail.").trim().escape().isEmail().normalizeEmail().not().isEmpty(),
+		check("r_password", "Password must be at least 6 characters.").trim().escape().isLength({ min: 6 }),
 		check("r_passwordrepeat").trim().escape().isLength({ min: 6 }).custom((value, { req }) => {
-			if (value !== req.body.r_password) { throw new Error("Password confirmation does not match password. "); }
+			if (value !== req.body.r_password) { throw new Error("Password confirmation does not match password "); }
 			return true;
 		})
 	],
@@ -53,8 +53,8 @@ router.post("/register",
 
 router.post("/login",
 	[
-		check("l_username", "Username cannot be empty. ").trim().escape().not().isEmpty(),
-		check("l_password", "Password must be at least 6 characters. ").trim().escape().not().isEmpty().isLength({ min: 6 })
+		check("l_username", "Username cannot be empty.").trim().escape().not().isEmpty(),
+		check("l_password", "Password must be at least 6 characters.").trim().escape().not().isEmpty().isLength({ min: 6 })
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -65,6 +65,7 @@ router.post("/login",
 
 		const { l_username, l_password } = request.body;
 
+		
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 		try {
 			client.query(

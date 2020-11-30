@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Login } from "./Login";
 import { Register } from "./Register";
+import { Shared } from "./Shared";
 
 export function Entrance({ userRequest }: basicprops): JSX.Element {
 	const [isLogin, setIsLogin] = useState<boolean>(true);
@@ -9,8 +10,7 @@ export function Entrance({ userRequest }: basicprops): JSX.Element {
 	return (
 		<div className="entrance-wrapper">
 			<div className="entrance">
-				<div className="logo" />
-				<div className="title">ESHATON // ENTRANCE</div>
+				<Shared showLogout={false} userRequest={userRequest} />
 
 				{(isLogin)
 					? <Login setIsLogin={setIsLogin} userRequest={userRequest} />

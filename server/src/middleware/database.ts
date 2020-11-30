@@ -3,6 +3,8 @@ import { QueryResult } from "pg";
 import { output } from "../shared/output";
 import { pool } from "../bin/www";
 
+import { PRODUCTION } from "../app";
+
 export async function connect(): Promise<void> {
 	const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 
@@ -14,7 +16,7 @@ export async function connect(): Promise<void> {
 			password VARCHAR(100) UNIQUE NOT NULL,
 			created TIMESTAMP DEFAULT NULL
 		)`)
-		.then((res: QueryResult<any>) => { output("Table 'users' created.", "yellow"); })
+		.then((res: QueryResult<any>) => { if (!PRODUCTION) { output("Table 'users' created.", "yellow"); } })
 		.catch((err: Error) => { throw console.log(err); });
 
 	client.query(
@@ -27,7 +29,7 @@ export async function connect(): Promise<void> {
 			characters_name VARCHAR[],
 			created TIMESTAMP DEFAULT NULL
 		)`)
-		.then((res: QueryResult<any>) => { output("Table 'campaigns' created.", "yellow"); })
+		.then((res: QueryResult<any>) => { if (!PRODUCTION) { output("Table 'campaigns' created.", "yellow"); } })
 		.catch((err: Error) => { throw console.log(err); });
 
 	client.query(
@@ -41,7 +43,7 @@ export async function connect(): Promise<void> {
 			campaign_name VARCHAR(32),
 			created TIMESTAMP DEFAULT NULL
 		)`)
-		.then((res: QueryResult<any>) => { output("Table 'characters' created.", "yellow"); })
+		.then((res: QueryResult<any>) => { if (!PRODUCTION) { output("Table 'characters' created.", "yellow"); } })
 		.catch((err: Error) => { throw console.log(err); });
 
 	client.release();

@@ -1,28 +1,61 @@
 import { toast } from "react-toastify";
 
-export function ListRow({ row, dt, type, setDisplay, setLastKey, setLastData }: listrowprops): JSX.Element {
-	let d = dt[0].split("-");
-	
+export function ListRow({ rowData, setDisplay }: listrowprops): JSX.Element {
+	const d = rowData.datetime[0].split("-");
+
 	return (
 		<div className="row">
-			<span className="button created" title={`Created At: ${dt[1].split(".")[0]} ${d[2]}:${d[1]}:${d[0]}`} />
-			<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${row.secretkey}`); }} value="" />
+			<span className="button created" title={`Created At: ${rowData.datetime[1].split(".")[0]} ${d[2]}:${d[1]}:${d[0]}`} />
+			<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${rowData.data.secretkey}`); }} value="" />
 
-			<span className="name">{row.name}</span>
-			{/*<span className="other">{(row.campaign_name) ? row.campaign_name : (row.characters_name) ? row.characters_name.join(", ") : ""}</span>*/}
+			<span className="name">{rowData.data.name}</span>
 
-			<input className={`button ${type.toLowerCase()}`} title={`${type} Character ${(type === "Add") ? "to" : "from"} Campaign`} type="button"
-				onClick={() => { setDisplay(`${type.toLowerCase()}_connection` as displayelement); setLastKey(row.secretkey); }} value=""
+			<input
+				type="button" value=""
+				className={`button ${(rowData.type === "character") ? "add" : "remove"}`}
+				title={`${(rowData.type === "character") ? "Add" : "Remove"} Character ${(rowData.type === "character") ? "to" : "from"} Campaign`}
+				onClick={() => {
+					setDisplay(["none", "none", "", {}]);
+					setDisplay([
+						`${(rowData.type === "character") ? "add" : "remove"}_connection` as displayelement,
+						"none",
+						rowData.data.secretkey,
+						rowData.data
+					]);
+				}}
 			/>
 
 			<div />
 
-			<input className="button view" title="View" type="button" onClick={() => { /* TODO: view func */ setLastData(row.data); }} value="" />
-			<input className="button edit" title="Edit" type="button" onClick={() => { /* TODO: edit func */ setLastData(row.data); }} value="" />
-			<input className="button delete" title="Delete" type="button" onClick={() => { /* TODO: delete func */ setLastKey(row.secretkey); }} value="" />
+			{(rowData.data.campaign_name && rowData.data.campaign_name.length > 0) ? <div />
+				: <input className="button edit" title="Edit" type="button" value=""
+					onClick={() => {
+						setDisplay(["none", "none", "", {}]);
+						setDisplay([rowData.type, "edit", rowData.data.secretkey, rowData.data]);
+					}}
+				/>
+			}
 
-			<span className="creator">{row.creator}</span>
-			<span className="data">{row.data}</span>
+			<input className="button view" title="View" type="button" value=""
+				onClick={() => {
+					setDisplay(["none", "none", "", {}]);
+					setDisplay([rowData.type, "view", rowData.data.secretkey, rowData.data]);
+				}}
+			/>
+
+			<input className="button delete" title="Delete" type="button" value=""
+				onClick={() => {
+					setDisplay(["none", "none", "", {}]);
+					setDisplay([rowData.type, "delete", rowData.data.secretkey, rowData.data]);
+				}}
+			/>
+
+			<span className="creator">{rowData.data.creator}</span>
+			<span className="data">{JSON.stringify(rowData.data)}</span>
+			<span className="other">
+				{(rowData.data.campaign_name) ? rowData.data.campaign_name : ""}
+				{(rowData.data.characters_name) ? rowData.data.characters_name.join(", ") : ""}
+			</span>
 		</div>
 	);
 }

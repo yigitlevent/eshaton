@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import { generateNumString } from "../shared/generateNumString";
 
-export function CampaignSheet({ type, close, userRequest }: sheetprops): JSX.Element {
+export function CampaignSheet({ data, type, close, userRequest }: sheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 
 	const getData = (): { s_name: string, s_secretkey: string; } => {
@@ -19,17 +19,15 @@ export function CampaignSheet({ type, close, userRequest }: sheetprops): JSX.Ele
 		delete testObject["s_submit"];
 		delete testObject["s_close"];
 
-		console.log(testObject);
-
 		return {
 			s_name: (testObject.s_campaign_name as string),
 			s_secretkey: (testObject.s_campaign_id as string)
 		};
 	};
 
-	const submitCamp = (event: React.FormEvent<HTMLInputElement>): void => {
+	const submitCamp = (event: React.FormEvent<HTMLInputElement>, type: string): void => {
 		event.preventDefault();
-		userRequest("/camp/new", "new_camp", getData());
+		userRequest(`/camp/${type}`, `${type}_camp` as requests, getData());
 	};
 
 	return (
@@ -39,12 +37,27 @@ export function CampaignSheet({ type, close, userRequest }: sheetprops): JSX.Ele
 				<input className="extra id" id="s_campaign_id" name="s_campaign_id" value={generateNumString(32)} readOnly />
 
 				<input className="extra" type="button" id="s_close" name="s_close" value="Close" onClick={close} />
-				<input className="extra" type="submit" id="s_submit" name="s_submit" value="Save Campaign" onClick={(event) => { submitCamp(event); }} />
+
+				{(type === "new")
+					? <input className="extra" type="submit" id="s_submit" name="s_submit" value="Save Campaign" onClick={(event) => { submitCamp(event, "new"); }} />
+					: null}
+
+				{(type === "edit")
+					? <input className="extra" type="submit" id="s_submit" name="s_submit" value="Edit Campaign" onClick={(event) => { submitCamp(event, "edit"); }} />
+					: null}
+
+				{(type === "delete")
+					? <input className="extra" type="submit" id="s_submit" name="s_submit" value="Delete Campaign" onClick={(event) => { submitCamp(event, "delete"); }} />
+					: null}
 
 				<br />
 
 				<label className="extra">Campaign Name: </label>
-				<input className="extra" type="text" id="s_campaign_name" name="s_campaign_name" />
+				<input className="extra" type="text" id="s_campaign_name" name="s_campaign_name"
+					key={data.name}
+					defaultValue={(data && type !== "new") ? data.name : null}
+					readOnly={(type === "view" || type === "delete") ? true : false}
+				/>
 			</div>
 		</form>
 	);

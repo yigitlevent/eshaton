@@ -1,8 +1,8 @@
 {
 	"name": "eshaton",
 	"author": "Yiğit Levent",
-	"description": "a degenesis app",
-	"version": "0.1.0",
+	"description": "A Degenesis Character Utility Application",
+	"version": "0.5.0",
 	"private": true,
 	"homepage": "https://github.com/yigitlevent/eshaton#readme",
 	"repository": {
@@ -13,12 +13,11 @@
 		"url": "https://github.com/yigitlevent/eshaton/issues"
 	},
 	"scripts": {
-		"build-server": "cd client && npm i && npm run build",
-		"build-client": "cd server && npm i && npm run build",
+		"build-server": "cd server && npm i && npm run build",
+		"build-client": "cd client && npm i && npm run build",
 		"build": "npm run build-server && npm run build-client",
 		"start": "cd server && npm run start",
-		"dev": "cd server && nodemon",
-		"logs": "heroku logs -t"
+		"dev": "cd server && nodemon"
 	},
 	"devDependencies": {
 		"nodemon": "^2.0.6"

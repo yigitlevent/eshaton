@@ -17,13 +17,13 @@ interface coordinate {
 	y: number;
 }
 
-type displaytype = "none" | "new" | "edit" | "view";
+type displaytype = "none" | "new" | "edit" | "view" | "delete";
 type displayelement = "none" | "character" | "campaign" | "add_connection" | "remove_connection";
 
 type requests = "register" | "login" | "auth" | "logout" | "add_connection" | "remove_connection"
-	//	CH CA		 CH CA			X X			X X				X X
-	| "new_char" | "list_char" | "get_char" | "edit_char" | "remove_char"
-	| "new_camp" | "list_camp" | "get_camp" | "edit_camp" | "remove_camp";
+	//	CH CA		 CH CA			X X				X X
+	| "new_char" | "list_char" | "edit_char" | "delete_char"
+	| "new_camp" | "list_camp" | "edit_camp" | "delete_camp";
 
 interface blockrow {
 	name: string;
@@ -56,8 +56,9 @@ interface entranceprops {
 }
 
 interface sheetprops {
+	data: any;
+	type: displaytype;
 	close: () => void;
-	type: "none" | "new" | "edit" | "view";
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
@@ -65,13 +66,15 @@ interface blockprops {
 	datakey: string;
 }
 
+interface rowDataset {
+	data: any;
+	datetime: string;
+	type: "character" | "campaign";
+}
+
 interface listrowprops {
-	row: any;
-	dt: any;
-	type: "Add" | "Remove";
-	setDisplay: (value: React.SetStateAction<displayelement>) => void;
-	setLastKey: (value: React.SetStateAction<string>) => void;
-	setLastData: (value: any) => void;
+	rowData: rowDataset;
+	setDisplay: (value: React.SetStateAction<[displayelement, displaytype, string, any]>) => void;
 }
 
 interface miniprops {
@@ -84,6 +87,11 @@ interface miniprops {
 }
 
 interface basicprops {
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
+}
+
+interface sharedprops {
+	showLogout: boolean;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 

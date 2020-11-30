@@ -11,7 +11,7 @@ export const router = express.Router();
 
 router.post("/new",
 	[
-		check("s_name", "Campaign name cannot be empty. ").trim().escape().not().isEmpty(),
+		check("s_name", "Campaign name cannot be empty.").trim().escape().not().isEmpty(),
 		check("s_secretkey", "Please get a valid Secret Key.").trim().escape().not().isEmpty()
 	],
 	async (request: express.Request, response: express.Response) => {
@@ -53,7 +53,7 @@ router.post("/new",
 			}
 		}
 		catch (err) {
-			return response.status(500).send({ status: "failure", message: "Unauthorized request. " });
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
 		}
 	}
 );
@@ -79,7 +79,7 @@ router.post("/list",
 					[_username],
 					async (error, results) => {
 						if (error) {
-							output(error);
+							if (!PRODUCTION) { output(error); };
 							return response.status(400).json({ status: "failure", message: "Campaign listing unsuccessful.", error });
 						}
 						else {
@@ -96,7 +96,7 @@ router.post("/list",
 			}
 		}
 		catch (err) {
-			return response.status(500).send({ status: "failure", message: "Unauthorized request. " });
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
 		}
 	}
 );
@@ -113,7 +113,6 @@ router.post("/remove",
 		const access_token: string = request.cookies["access_token"];
 
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
-
 		try {
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
@@ -153,7 +152,7 @@ router.post("/remove",
 			else { return response.status(500).send({ status: "failure", message: "Cannot find character or campaign or character is not in this campaign." }); }
 		}
 		catch (err) {
-			return response.status(500).send({ status: "failure", message: "Unauthorized request. " });
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
 		}
 		finally {
 			client.release();
@@ -161,12 +160,35 @@ router.post("/remove",
 	}
 );
 
-router.post("/get",
+router.post("/delete",
 	[
-		check("s_secretkey", "Invalid key. ").trim().escape().not().isEmpty(),
+		check("camp_key", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
 	],
 	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Errors.", errors: errors.array() }); };
 
+		const access_token: string = request.cookies["access_token"];
 
+		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { camp_key } = request.body;
+
+			await client.query("DELETE FROM campaigns WHERE secretkey = $1", [camp_key]);
+
+			await client.query("UPDATE characters SET (campaign, campaign_name) = (NULL, NULL) WHERE campaign = $1", [camp_key]);
+
+			return response.status(201).json({ status: "success", message: "Deleted campaign." });
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
+		}
+		finally {
+			client.release();
+		}
 	}
 );
+

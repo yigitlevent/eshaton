@@ -12,6 +12,36 @@ $color-text: #cccccc !default;
 $color-text-darker: #aaaaaa !default;
 $color-text-redder: #aa2626 !default;
 
+@mixin shared-topbar {
+	& > .button {
+		border: none;
+		background: none;
+		color: $color-text-redder;
+		font-size: 0.8em;
+		margin: -23px 0;
+		padding: 4px 6px 2px;
+		float: right;
+
+		&:hover {
+			color: lighten($color-text-redder, 20%);
+		}
+	}
+}
+
+@mixin read-only {
+	&:read-only:not([type="button"]):not([type="submit"]) {
+		background: none;
+
+		&:checked {
+			background: $color-light-bg;
+		}
+
+		&:hover {
+			filter: none;
+		}
+	}
+}
+
 .Toastify__toast--error {
 	background: $color-form !important;
 	border: 1px $color-red solid;
@@ -127,6 +157,12 @@ input[type="checkbox"] {
 
 input {
 	padding: 0 3px;
+
+	&:hover {
+		filter: brightness(140%);
+	}
+
+	@include read-only();
 }
 
 select {
@@ -137,6 +173,20 @@ select {
 	width: 220px;
 	margin: 0 auto;
 	appearance: none;
+
+	&:hover {
+		filter: brightness(140%);
+	}
+	
+	@include read-only();
+}
+
+a {
+	cursor: pointer;
+
+	&:hover {
+		filter: brightness(140%);
+	}
 }
 
 .divider {
@@ -185,17 +235,56 @@ select {
 		}
 	}
 
-	& > .entrance-wrapper {
+	& > .entrance-wrapper,
+	& > .main-wrapper {
 		width: 100%;
 		height: auto;
 
+		& > .entrance,
+		& > .dashboard {
+			& > .topbar {
+				margin: 4px -6px -2px;
+
+				@include shared-topbar();
+
+				& > .button {
+					&.discord,
+					&.github {
+						background-size: 20px 20px !important;
+						height: 22px;
+						width: 22px;
+					}
+
+					&.discord {
+						background: transparent url("./assets/icons/discord.svg") no-repeat center center;
+						margin: 0;
+					}
+
+					&.github {
+						background: transparent url("./assets/icons/github.svg") no-repeat center center;
+						margin: 0;
+					}
+
+					&.logout {
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
+
+	& > .entrance-wrapper {
 		& > .entrance {
-			width: 400px;
+			width: 450px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
 			background: $color-black-light;
 			border: 1px $color-red solid;
 			max-width: 100%;
+
+			@media only screen and (max-width: 690px) {
+				margin: 0 auto;
+			}
 
 			& > .logo {
 				background: $color-black-light url("./assets/icons/degenesis.svg") no-repeat center center;
@@ -224,10 +313,6 @@ select {
 					font-size: 1em;
 					margin: 2px auto;
 					padding: 4px 6px 2px;
-
-					&:hover {
-						color: lighten($color-text, 20%);
-					}
 				}
 
 				& > form > .input-change {
@@ -237,26 +322,20 @@ select {
 					color: $color-text-darker;
 					font-size: 0.8em;
 					margin: 20px auto 2px;
-
-					&:hover {
-						color: lighten($color-text-darker, 20%);
-					}
 				}
 			}
 		}
 	}
 
 	& > .main-wrapper {
-		width: 100%;
-		height: auto;
-
 		& > .dashboard,
 		& > .mini {
-			max-width: 600px;
+			width: 600px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
 			background: #111;
 			border: 1px solid #ec1e26;
+			max-width: 100%;
 		}
 
 		& > .mini > div {
@@ -290,13 +369,6 @@ select {
 				text-align: center;
 			}
 
-			& > .logout {
-				position: relative;
-				top: -130px;
-				right: -513px;
-				padding: 1px 5px;
-			}
-
 			& > .menu {
 				margin: 4px auto;
 				width: max-content;
@@ -309,23 +381,11 @@ select {
 				width: 100%;
 				margin: 18px 0;
 
+				@include shared-topbar();
+
 				& > .title {
 					font-size: 1.4em;
 					border-bottom: 1px #f00 solid;
-				}
-
-				& > .button {
-					border: none;
-					background: none;
-					color: $color-text-redder;
-					font-size: 0.8em;
-					margin: -23px 0;
-					padding: 4px 6px 2px;
-					float: right;
-
-					&:hover {
-						color: lighten($color-text-redder, 20%);
-					}
 				}
 
 				& > .list {
@@ -353,7 +413,6 @@ select {
 						& > .button {
 							height: 20px;
 							width: 20px;
-							filter: invert(80%);
 							background-size: 20px 20px !important;
 						}
 
@@ -379,6 +438,7 @@ select {
 							background: transparent url("./assets/icons/remove.svg") no-repeat center center;
 						}
 
+						& > .other,
 						& > .creator,
 						& > .data {
 							display: none;
@@ -570,7 +630,6 @@ select {
 							& > .icon {
 								height: 100px;
 								width: 100%;
-								filter: invert(80%);
 							}
 						}
 
