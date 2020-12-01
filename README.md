@@ -25,14 +25,10 @@ This is used during development. Note that you need to run both or individual bu
 ## Plans
 
 -   Actually make use of hot reloading that comes with React, maybe use `concurrently` and such.
--   Custom tooltips instead of client tooltips.
+-   Custom tooltips instead of browser-style tooltips.
 -   Recheck the server security.
     -   Especially with import/export functionality.
--   Add character/campaign sheet view functionality.
--   Add character/campaign sheet edit functionality.
--   Add character/campaign sheet delete functionality.
 -   Add a way for campaign owners to view the players' character sheets.
--   Prevent players from making changes to their characters after they commit it to a campaign.
 -   Add a way for players to submit edited character sheets to the campaign owner approval.
 
 ## Links
