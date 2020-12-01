@@ -2,7 +2,7 @@ import { useRef } from "react";
 
 import { Divider } from "../parts/Divider";
 
-export function Mini({ label, rType, char_key, camp_key, close, userRequest }: miniprops): JSX.Element {
+export function Mini({ label, rType, char_key, camp_key, close, getLists, userRequest }: miniprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 
 	const getData = (): { key: string; } => {
@@ -42,7 +42,7 @@ export function Mini({ label, rType, char_key, camp_key, close, userRequest }: m
 			(rType === "Add") ? "/char/add" : "/camp/remove",
 			(rType === "Add") ? "add_connection" : "remove_connection",
 			data
-		);
+		).then(() => { getLists(); });
 	};
 
 	return (

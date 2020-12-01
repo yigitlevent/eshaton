@@ -11,9 +11,12 @@ export const router = express.Router();
 
 router.post("/new",
 	[
-		check("c_name", "Character name cannot be empty.").trim().escape().not().isEmpty(),
-		check("c_secretkey", "Please get a valid Secret Key.").trim().escape().not().isEmpty(),
-		check("c_data", "Password must be at least 6 characters.").trim().escape().not().isEmpty()
+		check("c_name").trim().escape()
+			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 characters.")
+			.not().isEmpty().withMessage("Character name cannot be empty.")
+			.matches(/^[A-Za-z\s]+$/).withMessage("Character name must be alphabetic."),
+		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("c_data", "Data is invalid.").trim().escape().not().isEmpty()
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -102,57 +105,9 @@ router.post("/list",
 	}
 );
 
-router.post("/add",
-	[
-		check("char_key", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
-		check("camp_key", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
-	],
-	async (request: express.Request, response: express.Response) => {
-		const errors: Result<ValidationError> = validationResult(request);
-		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Errors.", errors: errors.array() }); };
-
-		const access_token: string = request.cookies["access_token"];
-
-		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
-		try {
-			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
-			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
-
-			const { char_key, camp_key } = request.body;
-
-			let char_name = "";
-			let camp_name = "";
-
-			await client.query(
-				"(SELECT name FROM characters WHERE secretkey = $1) UNION ALL (SELECT name FROM campaigns WHERE secretkey = $2)",
-				[char_key, camp_key])
-				.then((results) => {
-					char_name = results.rows[0].name;
-					camp_name = results.rows[1].name;
-				});
-
-			await client.query(
-				"UPDATE campaigns SET (characters, characters_name) = (array_append(characters, $1), array_append(characters_name, $2)) WHERE secretkey = $3",
-				[char_key, char_name, camp_key]);
-
-			await client.query(
-				"UPDATE characters SET (campaign, campaign_name) = ($1, $2) WHERE secretkey = $3",
-				[camp_key, camp_name, char_key]);
-
-			return response.status(201).json({ status: "success", message: "Connection created." });
-		}
-		catch (err) {
-			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
-		}
-		finally {
-			client.release();
-		}
-	}
-);
-
 router.post("/delete",
 	[
-		check("char_key", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -165,22 +120,22 @@ router.post("/delete",
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
-			const { char_key } = request.body;
+			const { c_secretkey } = request.body;
 
 			let char_name = "";
 			let camp_key = "";
 
-			await client.query("SELECT name FROM characters WHERE secretkey = $1", [char_key])
+			await client.query("SELECT name FROM characters WHERE secretkey = $1", [c_secretkey])
 				.then((results) => { char_name = results.rows[0].name; });
 
-			await client.query("SELECT campaign FROM characters WHERE secretkey = $1", [char_key])
+			await client.query("SELECT campaign FROM characters WHERE secretkey = $1", [c_secretkey])
 				.then((results) => { camp_key = results.rows[0].campaign; });
 
-			await client.query("DELETE FROM characters WHERE secretkey = $1", [char_key]);
+			await client.query("DELETE FROM characters WHERE secretkey = $1", [c_secretkey]);
 
 			await client.query(
 				"UPDATE campaigns SET (characters, characters_name) = (array_remove(characters, $1), array_remove(characters_name, $2)) WHERE secretkey = $3",
-				[char_key, char_name, camp_key]);
+				[c_secretkey, char_name, camp_key]);
 
 			return response.status(201).json({ status: "success", message: "Deleted character." });
 		}
@@ -193,3 +148,52 @@ router.post("/delete",
 	}
 );
 
+router.post("/edit",
+	[
+		check("c_name").trim().escape()
+			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 characters.")
+			.not().isEmpty().withMessage("Character name cannot be empty.")
+			.matches(/^[A-Za-z\s]+$/).withMessage("Character name must be alphabetic."),
+		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("c_data", "Data is invalid.").trim().escape().not().isEmpty()
+	],
+	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Character edit failed.", errors: errors.array() }); };
+
+		const access_token: string = request.cookies["access_token"];
+
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { c_name, c_secretkey, c_data } = request.body;
+
+			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+			try {
+				client.query(
+					"UPDATE characters SET (name, data) = ($1, $2) WHERE secretkey = $3",
+					[c_name, c_data, c_secretkey],
+					async (error, results) => {
+						if (error) {
+							if (!PRODUCTION) { output(error); };
+							return response.status(400).json({ status: "failure", message: "Character edit unsuccessful.", error });
+						}
+						else {
+							return response.status(201).json({ status: "success", message: "Character edit succesful." });
+						}
+					}
+				);
+			}
+			catch (err) {
+				return response.status(500).send({ status: "failure", message: "Unforseen error occured.", error: err });
+			}
+			finally {
+				client.release();
+			}
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
+		}
+	}
+);

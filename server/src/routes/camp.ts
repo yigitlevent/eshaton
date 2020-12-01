@@ -11,8 +11,11 @@ export const router = express.Router();
 
 router.post("/new",
 	[
-		check("s_name", "Campaign name cannot be empty.").trim().escape().not().isEmpty(),
-		check("s_secretkey", "Please get a valid Secret Key.").trim().escape().not().isEmpty()
+		check("s_name", "Campaign name cannot be empty.").trim().escape()
+			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 characters.")
+			.not().isEmpty().withMessage("Campaign name cannot be empty.")
+			.matches(/^[A-Za-z\s]+$/).withMessage("Campaign name must be alphabetic."),
+		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -103,8 +106,8 @@ router.post("/list",
 
 router.post("/remove",
 	[
-		check("char_key", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
-		check("camp_key", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("s_secretkey", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -117,7 +120,7 @@ router.post("/remove",
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
-			const { char_key, camp_key } = request.body;
+			const { c_secretkey, s_secretkey } = request.body;
 
 			let char_name = "";
 			let camp_name = "";
@@ -125,7 +128,7 @@ router.post("/remove",
 
 			await client.query(
 				"(SELECT name FROM characters WHERE secretkey = $1) UNION ALL (SELECT name FROM campaigns WHERE secretkey = $2)",
-				[char_key, camp_key])
+				[c_secretkey, s_secretkey])
 				.then((results) => {
 					char_name = results.rows[0].name;
 					camp_name = results.rows[1].name;
@@ -133,7 +136,7 @@ router.post("/remove",
 
 			await client.query(
 				"(SELECT campaign_name FROM characters WHERE secretkey = $1)",
-				[char_key])
+				[c_secretkey])
 				.then((results) => {
 					char_camp_name = results.rows[0].campaign_name;
 				});
@@ -141,11 +144,11 @@ router.post("/remove",
 			if (char_name && camp_name && char_camp_name === camp_name) {
 				await client.query(
 					"UPDATE campaigns SET (characters, characters_name) = (array_remove(characters, $1), array_remove(characters_name, $2)) WHERE secretkey = $3",
-					[char_key, char_name, camp_key]);
+					[c_secretkey, char_name, s_secretkey]);
 
 				await client.query(
 					"UPDATE characters SET (campaign, campaign_name) = (NULL, NULL) WHERE secretkey = $1",
-					[char_key]);
+					[c_secretkey]);
 
 				return response.status(201).json({ status: "success", message: "Connection removed." });
 			}
@@ -160,9 +163,10 @@ router.post("/remove",
 	}
 );
 
-router.post("/delete",
+router.post("/add",
 	[
-		check("camp_key", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("s_secretkey", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -175,11 +179,58 @@ router.post("/delete",
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
-			const { camp_key } = request.body;
+			const { c_secretkey, s_secretkey } = request.body;
 
-			await client.query("DELETE FROM campaigns WHERE secretkey = $1", [camp_key]);
+			let char_name = "";
+			let camp_name = "";
 
-			await client.query("UPDATE characters SET (campaign, campaign_name) = (NULL, NULL) WHERE campaign = $1", [camp_key]);
+			await client.query(
+				"(SELECT name FROM characters WHERE secretkey = $1) UNION ALL (SELECT name FROM campaigns WHERE secretkey = $2)",
+				[c_secretkey, s_secretkey])
+				.then((results) => {
+					char_name = results.rows[0].name;
+					camp_name = results.rows[1].name;
+				});
+
+			await client.query(
+				"UPDATE campaigns SET (characters, characters_name) = (array_append(characters, $1), array_append(characters_name, $2)) WHERE secretkey = $3",
+				[c_secretkey, char_name, s_secretkey]);
+
+			await client.query(
+				"UPDATE characters SET (campaign, campaign_name) = ($1, $2) WHERE secretkey = $3",
+				[s_secretkey, camp_name, c_secretkey]);
+
+			return response.status(201).json({ status: "success", message: "Connection created." });
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
+		}
+		finally {
+			client.release();
+		}
+	}
+);
+
+router.post("/delete",
+	[
+		check("s_secretkey", "Invalid campaign secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+	],
+	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Errors.", errors: errors.array() }); };
+
+		const access_token: string = request.cookies["access_token"];
+
+		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { s_secretkey } = request.body;
+
+			await client.query("DELETE FROM campaigns WHERE secretkey = $1", [s_secretkey]);
+
+			await client.query("UPDATE characters SET (campaign, campaign_name) = (NULL, NULL) WHERE campaign = $1", [s_secretkey]);
 
 			return response.status(201).json({ status: "success", message: "Deleted campaign." });
 		}
@@ -192,3 +243,96 @@ router.post("/delete",
 	}
 );
 
+router.post("/edit",
+	[
+		check("s_name", "Campaign name cannot be empty.").trim().escape()
+			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 characters.")
+			.not().isEmpty().withMessage("Campaign name cannot be empty.")
+			.matches(/^[A-Za-z\s]+$/).withMessage("Campaign name must be alphabetic."),
+		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+	],
+	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Campaign edit failed.", errors: errors.array() }); };
+
+		const access_token: string = request.cookies["access_token"];
+
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { s_name, s_secretkey } = request.body;
+
+			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+			try {
+				client.query(
+					"UPDATE campaigns SET name = $1 WHERE secretkey = $2",
+					[s_name, s_secretkey],
+					async (error, results) => {
+						if (error) {
+							if (!PRODUCTION) { output(error); };
+							return response.status(400).json({ status: "failure", message: "Campaign edit unsuccessful.", error });
+						}
+						else {
+							return response.status(201).json({ status: "success", message: "Campaign edit succesful." });
+						}
+					}
+				);
+			}
+			catch (err) {
+				return response.status(500).send({ status: "failure", message: "Unforseen error occured.", error: err });
+			}
+			finally {
+				client.release();
+			}
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
+		}
+	}
+);
+
+router.post("/get",
+	[
+		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+	],
+	async (request: express.Request, response: express.Response) => {
+		const errors: Result<ValidationError> = validationResult(request);
+		if (!errors.isEmpty()) { return response.status(400).json({ status: "failure", message: "Campaign return failed.", errors: errors.array() }); };
+
+		const access_token: string = request.cookies["access_token"];
+
+		try {
+			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
+			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
+
+			const { s_secretkey } = request.body;
+
+			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
+			try {
+				client.query(
+					"SELECT * FROM campaigns WHERE secretkey = $1",
+					[s_secretkey],
+					async (error, results) => {
+						if (error) {
+							if (!PRODUCTION) { output(error); };
+							return response.status(400).json({ status: "failure", message: "Campaign return unsuccessful.", error });
+						}
+						else {
+							return response.status(201).json({ status: "success", message: "Campaign return succesful.", rows: results.rows });
+						}
+					}
+				);
+			}
+			catch (err) {
+				return response.status(500).send({ status: "failure", message: "Unforseen error occured.", error: err });
+			}
+			finally {
+				client.release();
+			}
+		}
+		catch (err) {
+			return response.status(500).send({ status: "failure", message: "Unauthorized request." });
+		}
+	}
+);

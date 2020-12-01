@@ -174,7 +174,7 @@ const BLOCKS: { [key: string]: blockrow[]; } = {
 	],
 };
 
-export function Block({ datakey }: blockprops): JSX.Element {
+export function Block({ datakey, type, data }: blockprops): JSX.Element {
 	const imgRef: React.MutableRefObject<HTMLImageElement> | React.MutableRefObject<null> = useRef(null);
 	const [imgSrc, setImgSrc] = useState(`./assets/icons/empty.svg`);
 
@@ -210,60 +210,70 @@ export function Block({ datakey }: blockprops): JSX.Element {
 	};
 
 	const BLOCKDATA = BLOCKS[datakey];
-	const items = BLOCKDATA.map(
-		(row) => {
-			const checkboxes: JSX.Element[] = [];
 
-			for (let i = 0; i < row.checkboxes; i++) {
-				checkboxes.push(
-					<input
-						key={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
-						type="checkbox"
-						className="checkbox"
-						id={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
-						name={`c_${row.name.toLowerCase().replace(/ /g, '')}_${i}`}
-						onClick={checkboxPropogation}
-					/>
-				);
-			}
+	const DATA = (data.data) ? JSON.parse(data.data.replace(/&quot;/g, '"')) : undefined;
 
-			return (
-				<div key={row.name} className={`row columns-${row.checkboxes} ${row.type}`}>
-					{(row.type !== "empty" && row.type !== "condition" && row.type !== "input" && row.type !== "select" && row.type !== "logo")
-						? <div className={`${row.type} span-${row.checkboxes + 1}`}>{row.name.toUpperCase()}</div>
-						: null
-					}
+	const items = BLOCKDATA.map((row) => {
+		const checkboxes: JSX.Element[] = [];
+		const basicKey = row.name.toLowerCase().replace(/ /g, '');
 
-					{(row.type === "input")
-						? <input
-							className={`${row.type} span-${row.checkboxes + 1}`}
-							type="text" id={`c_${row.name.toLowerCase().replace(/ /g, '')}`}
-							name={`c_${row.name.toLowerCase().replace(/ /g, '')}`}
-							placeholder={(row.placeholder) ? row.name : ""}
-						/>
-						: null
-					}
-
-					{(row.type === "select")
-						? <Select row={row} onChange={selectChange} />
-						: null
-					}
-
-					{(row.type === "logo")
-						? <img className={`icon ${row.name}`} ref={imgRef} src={imgSrc} alt="" />
-						: null
-					}
-
-					{(row.type === "empty")
-						? <div className={`${row.name}`} />
-						: null
-					}
-
-					{checkboxes}
-				</div>
+		for (let i = 0; i < row.checkboxes; i++) {
+			checkboxes.push(
+				<input
+					key={`c_${basicKey}_${i} ${data.name}`}
+					type="checkbox"
+					className="checkbox"
+					id={`c_${basicKey}_${i}`}
+					name={`c_${basicKey}_${i}`}
+					onClick={checkboxPropogation}
+					disabled={(type === "view" || type === "delete") ? true : false}
+					defaultChecked={(DATA && type !== "new") ? DATA[`c_${basicKey}_${i}`] : false}
+				/>
 			);
 		}
-	);
+
+		return (
+			<div key={row.name} className={`row columns-${row.checkboxes} ${row.type}`}>
+				{(row.type !== "empty" && row.type !== "condition" && row.type !== "input" && row.type !== "select" && row.type !== "logo")
+					? <div className={`${row.type} span-${row.checkboxes + 1}`}>{row.name.toUpperCase()}</div>
+					: null
+				}
+
+				{(row.type === "input")
+					? <input
+						className={`${row.type} span-${row.checkboxes + 1}`}
+						type="text" id={`c_${basicKey}`}
+						name={`c_${basicKey}`}
+						placeholder={(row.placeholder) ? row.name : ""}
+						key={`c_${basicKey} ${data.name}`}
+						defaultValue={(DATA && type !== "new") ? DATA[`c_${basicKey}`] : null}
+						readOnly={(type === "view" || type === "delete" || (basicKey === "name" && type === "edit")) ? true : false}
+					/>
+					: null
+				}
+
+				{(row.type === "select")
+					? <Select row={row} type={type}
+						onChange={selectChange}
+						value={(DATA) ? DATA[`c_${basicKey}`] : null}
+					/>
+					: null
+				}
+
+				{(row.type === "logo")
+					? <img key={`c_${basicKey} ${data.name}`} className={`icon ${row.name}`} ref={imgRef} src={imgSrc} alt="" />
+					: null
+				}
+
+				{(row.type === "empty")
+					? <div className={`${row.name}`} />
+					: null
+				}
+
+				{checkboxes}
+			</div>
+		);
+	});
 
 	useEffect(() => {
 		if (imgRef && imgRef.current) {
@@ -278,7 +288,9 @@ export function Block({ datakey }: blockprops): JSX.Element {
 	);
 }
 
-function Select({ row, onChange }: selectprops): JSX.Element {
+function Select({ row, onChange, type, value }: selectprops): JSX.Element {
+	const ref: React.MutableRefObject<HTMLSelectElement> | React.MutableRefObject<null> = useRef(null);
+
 	const options = row.selectdata?.map(
 		(data) => {
 			let split = data.trim().split(" ");
@@ -294,16 +306,27 @@ function Select({ row, onChange }: selectprops): JSX.Element {
 
 	options?.unshift(<option key={""} value=""></option>);
 
+	useEffect(() => {
+		if (ref && ref.current) {
+			let event = new Event('change', { bubbles: true });
+			// Actually React.MutableRefObject<HTMLSelectElement> but not important at this point
+			(ref as any).current.dispatchEvent(event);
+		}
+	}, [ref, value]);
+
 	return (
 		<select
+			ref={ref}
 			className={`${row.name}`}
 			name={`c_${row.name}`}
 			id={`c_${row.name}`}
+			key={`c_${row.name} ${value}`}
 			onChange={(e) => { onChange(e, row.name); }}
+			defaultValue={(value && type !== "new") ? value : ""}
+			disabled={(type === "view" || type === "delete") ? true : false}
 		>
 			{options}
 		</select>
-
 	);
 }
 

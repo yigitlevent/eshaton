@@ -21,9 +21,8 @@ type displaytype = "none" | "new" | "edit" | "view" | "delete";
 type displayelement = "none" | "character" | "campaign" | "add_connection" | "remove_connection";
 
 type requests = "register" | "login" | "auth" | "logout" | "add_connection" | "remove_connection"
-	//	CH CA		 CH CA			X X				X X
 	| "new_char" | "list_char" | "edit_char" | "delete_char"
-	| "new_camp" | "list_camp" | "edit_camp" | "delete_camp";
+	| "new_camp" | "list_camp" | "edit_camp" | "delete_camp" | "get_camp";
 
 interface blockrow {
 	name: string;
@@ -59,11 +58,20 @@ interface sheetprops {
 	data: any;
 	type: displaytype;
 	close: () => void;
+	getLists: () => void;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface blockprops {
 	datakey: string;
+	type: string;
+	data: any;
+}
+
+interface tableprops {
+	datakey: string;
+	type: string;
+	data: any;
 }
 
 interface rowDataset {
@@ -83,6 +91,7 @@ interface miniprops {
 	char_key?: string;
 	camp_key?: string;
 	close: () => void;
+	getLists: () => void;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
@@ -98,10 +107,8 @@ interface sharedprops {
 interface selectprops {
 	row: blockrow;
 	onChange: (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => void;
-}
-
-interface tableprops {
-	datakey: string;
+	type: string;
+	value: string;
 }
 
 interface notificationprops {

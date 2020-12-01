@@ -28,16 +28,77 @@ $color-text-redder: #aa2626 !default;
 	}
 }
 
-@mixin read-only {
-	&:read-only:not([type="button"]):not([type="submit"]) {
-		background: none;
+@mixin list {
+	& > .title {
+		font-size: 1.4em;
+		border-bottom: 1px #f00 solid;
+	}
 
-		&:checked {
-			background: $color-light-bg;
-		}
+	& > .list {
+		font-size: 1em;
 
-		&:hover {
-			filter: none;
+		& > .row {
+			&.characters-list {
+				grid-template-columns: 20px auto;
+			}
+
+			&.items-list {
+				grid-template-columns: 20px 20px auto 20px 20px 20px;
+			}
+
+			&.characters-list,
+			&.items-list {
+				width: 100%;
+				height: 27px;
+				padding: 3px 4px;
+				margin: 2px 0;
+				display: grid;
+				grid-template-rows: 20px;
+				gap: 5px;
+				background: $color-row;
+
+				&:nth-child(2n) {
+					background: darken($color-row, 3%);
+				}
+
+				& > .name {
+					font-size: 1.2em;
+				}
+
+				& > .button {
+					height: 20px;
+					width: 20px;
+					background-size: 20px 20px !important;
+				}
+
+				& > .created {
+					background: transparent url("./assets/icons/time.svg") no-repeat center center;
+				}
+				& > .secretkey {
+					background: transparent url("./assets/icons/key.svg") no-repeat center center;
+				}
+				& > .view {
+					background: transparent url("./assets/icons/view.svg") no-repeat center center;
+				}
+				& > .edit {
+					background: transparent url("./assets/icons/edit.svg") no-repeat center center;
+				}
+				& > .delete {
+					background: transparent url("./assets/icons/delete.svg") no-repeat center center;
+				}
+				& > .add {
+					background: transparent url("./assets/icons/add.svg") no-repeat center center;
+				}
+				& > .remove {
+					background: transparent url("./assets/icons/remove.svg") no-repeat center center;
+				}
+
+				& > .other,
+				& > .creator,
+				& > .data {
+					display: none;
+				}
+			}
 		}
 	}
 }
@@ -121,6 +182,10 @@ body {
 	background-color: $color-black;
 }
 
+body {
+	overflow: scroll;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -151,7 +216,16 @@ input[type="checkbox"] {
 	appearance: none;
 
 	&:checked {
-		background: $color-light-bg;
+		background: $color-light-bg !important;
+	}
+
+	&:disabled {
+		&:not(:checked) {
+			background: none;
+		}
+		&:hover {
+			filter: none;
+		}
 	}
 }
 
@@ -162,7 +236,14 @@ input {
 		filter: brightness(140%);
 	}
 
-	@include read-only();
+	&:read-only:not([type="button"]):not([type="submit"]):not([type="checkbox"]) {
+		background: none;
+		border-bottom: 1px $color-form solid;
+
+		&:hover {
+			filter: none;
+		}
+	}
 }
 
 select {
@@ -177,8 +258,15 @@ select {
 	&:hover {
 		filter: brightness(140%);
 	}
-	
-	@include read-only();
+
+	&:disabled {
+		background: none;
+		border-bottom: 1px $color-form solid;
+
+		&:hover {
+			filter: none;
+		}
+	}
 }
 
 a {
@@ -186,6 +274,14 @@ a {
 
 	&:hover {
 		filter: brightness(140%);
+	}
+
+	& > span {
+		height: 1px;
+		width: 1px;
+		position: absolute;
+		overflow: hidden;
+		top: -10px;
 	}
 }
 
@@ -243,7 +339,7 @@ a {
 		& > .entrance,
 		& > .dashboard {
 			& > .topbar {
-				margin: 4px -6px -2px;
+				margin: 4px -6px -20px;
 
 				@include shared-topbar();
 
@@ -266,7 +362,7 @@ a {
 					}
 
 					&.logout {
-						margin: 0;
+						margin: 4px -45px 0 0;
 					}
 				}
 			}
@@ -383,66 +479,34 @@ a {
 
 				@include shared-topbar();
 
-				& > .title {
-					font-size: 1.4em;
-					border-bottom: 1px #f00 solid;
+				@include list;
+			}
+		}
+
+		& > .character-sheet {
+			max-width: 900px;
+		}
+
+		& > .campaign-sheet {
+			max-width: 600px;
+
+			@include list;
+
+			& > .wrapper {
+				& > .hide {
+					display: none;
 				}
 
-				& > .list {
-					font-size: 1em;
+				& > .block {
+					display: grid;
+					grid-template-columns: 100px auto 100px;
+					grid-template-rows: 20px;
+					gap: 2px;
 
-					& > .row {
+					& > * {
+						height: 100%;
 						width: 100%;
-						height: 27px;
-						padding: 3px 4px;
-						margin: 2px 0;
-						display: grid;
-						grid-template-rows: 20px;
-						grid-template-columns: 20px 20px auto 20px 20px 20px 20px 20px;
-						gap: 5px;
-						background: $color-row;
-
-						&:nth-child(2n) {
-							background: darken($color-row, 3%);
-						}
-
-						& > .name {
-							font-size: 1.2em;
-						}
-
-						& > .button {
-							height: 20px;
-							width: 20px;
-							background-size: 20px 20px !important;
-						}
-
-						& > .created {
-							background: transparent url("./assets/icons/time.svg") no-repeat center center;
-						}
-						& > .secretkey {
-							background: transparent url("./assets/icons/key.svg") no-repeat center center;
-						}
-						& > .view {
-							background: transparent url("./assets/icons/view.svg") no-repeat center center;
-						}
-						& > .edit {
-							background: transparent url("./assets/icons/edit.svg") no-repeat center center;
-						}
-						& > .delete {
-							background: transparent url("./assets/icons/delete.svg") no-repeat center center;
-						}
-						& > .add {
-							background: transparent url("./assets/icons/add.svg") no-repeat center center;
-						}
-						& > .remove {
-							background: transparent url("./assets/icons/remove.svg") no-repeat center center;
-						}
-
-						& > .other,
-						& > .creator,
-						& > .data {
-							display: none;
-						}
+						margin: 0;
 					}
 				}
 			}
@@ -450,15 +514,18 @@ a {
 
 		& > .character-sheet,
 		& > .campaign-sheet {
-			max-width: 900px;
 			margin: 10px auto;
 			padding: 5px 15px 15px;
 			background: $color-black-light;
 			border: 1px $color-red solid;
 
 			& > .extras {
-				width: max-content;
 				margin: 2px auto;
+				display: flex;
+				flex-flow: row wrap;
+				justify-content: center;
+				align-items: center;
+				align-content: center;
 
 				& > .extra {
 					display: inline-block;
@@ -467,6 +534,7 @@ a {
 					font-size: 0.9em;
 					text-align: center;
 					width: 120px;
+					flex: 0 0 auto;
 
 					&.campaign-id,
 					&.label,

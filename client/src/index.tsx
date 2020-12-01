@@ -47,7 +47,7 @@ function App(): JSX.Element {
 						resolve(false);
 					}
 					else {
-						if (requestType === "list_char" || requestType === "list_camp") {
+						if (requestType === "list_char" || requestType === "list_camp" || requestType === "get_camp") {
 							resolve(response.rows as any[]);
 						}
 						else if (requestType === "logout") {

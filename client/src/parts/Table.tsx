@@ -25,7 +25,7 @@ const TABLES: { [key: string]: tabledata; } = {
 	}
 };
 
-export function Table({ datakey }: tableprops): JSX.Element {
+export function Table({ datakey, type, data }: tableprops): JSX.Element {
 	const TABLEDATA = TABLES[datakey];
 
 	const rows: JSX.Element[] = TABLEDATA.columns.map(
@@ -34,15 +34,22 @@ export function Table({ datakey }: tableprops): JSX.Element {
 		}
 	);
 
+	const DATA = (data.data) ? JSON.parse(data.data.replace(/&quot;/g, '"')) : undefined;
+
 	for (let i = 0; i < TABLEDATA.rows; i++) {
 		for (let ii = 0; ii < TABLEDATA.columns.length; ii++) {
+			const name = `${datakey}_${i}_${TABLEDATA.columns[ii].toLowerCase()}`;
+
 			rows.push(
 				<input
-					key={`c_${datakey}_${i}_${TABLEDATA.columns[ii].toLowerCase()}`}
 					type="text"
 					className="table-input"
-					id={`c_${datakey}_${i}_${TABLEDATA.columns[ii].toLowerCase()}`}
-					name={`c_${datakey}_${i}_${TABLEDATA.columns[ii].toLowerCase()}`}
+					id={`c_${name}`}
+					name={`c_${name}`}
+
+					key={`c_${name} ${data.name}`}
+					defaultValue={(DATA && type !== "new") ? DATA[`c_${name}`] : null}
+					readOnly={(type === "view" || type === "delete") ? true : false}
 				/>
 			);
 		}

@@ -4,28 +4,11 @@ export function ListRow({ rowData, setDisplay }: listrowprops): JSX.Element {
 	const d = rowData.datetime[0].split("-");
 
 	return (
-		<div className="row">
+		<div className="row items-list">
 			<span className="button created" title={`Created At: ${rowData.datetime[1].split(".")[0]} ${d[2]}:${d[1]}:${d[0]}`} />
 			<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${rowData.data.secretkey}`); }} value="" />
 
 			<span className="name">{rowData.data.name}</span>
-
-			<input
-				type="button" value=""
-				className={`button ${(rowData.type === "character") ? "add" : "remove"}`}
-				title={`${(rowData.type === "character") ? "Add" : "Remove"} Character ${(rowData.type === "character") ? "to" : "from"} Campaign`}
-				onClick={() => {
-					setDisplay(["none", "none", "", {}]);
-					setDisplay([
-						`${(rowData.type === "character") ? "add" : "remove"}_connection` as displayelement,
-						"none",
-						rowData.data.secretkey,
-						rowData.data
-					]);
-				}}
-			/>
-
-			<div />
 
 			{(rowData.data.campaign_name && rowData.data.campaign_name.length > 0) ? <div />
 				: <input className="button edit" title="Edit" type="button" value=""

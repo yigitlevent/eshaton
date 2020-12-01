@@ -4,20 +4,26 @@ import { ListRow } from "../parts/ListRow";
 
 import { CharacterSheet } from "./CharacterSheet";
 import { CampaignSheet } from "./CampaignSheet";
-import { Mini } from "./Mini";
 import { Shared } from "./Shared";
 
 export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	const [display, setDisplay] = useState(["none", "none", "", {}] as [displayelement, displaytype, string, any]); // el, type, key, data
 
-	const [charRows, setCharRows] = useState([] as any[]);
-	const [campRows, setCampRows] = useState([] as any[]);
+	const [listCount, setListCount] = useState(0);
+
+	const [charRows, setCharRows] = useState<JSX.Element[]>([]);
+	const [campRows, setCampRows] = useState<JSX.Element[]>([]);
 
 	const close = (): void => {
 		setDisplay(["none", "none", "", {}]);
+		setListCount(l => l + 1);
 	};
 
-	const getLists = useCallback((): void => {
+	const getLists = useCallback(() => {
+		setListCount(l => l + 1);
+	}, []);
+
+	useEffect(() => {
 		userRequest("/char/list", "list_char")
 			.then((val) => {
 				setCharRows((val as any[]).map((row: any) => {
@@ -31,11 +37,7 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 					return <ListRow rowData={{ data: row, datetime: row.created.split("T"), type: "campaign" } as rowDataset} setDisplay={setDisplay} />;
 				}));
 			});
-	}, [userRequest]);
-
-	useEffect(() => {
-		getLists();
-	}, [getLists]);
+	}, [listCount, userRequest]);
 
 	return (
 		<div className="main-wrapper">
@@ -60,19 +62,11 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 			</div>
 
 			{(display[0] === "character")
-				? <CharacterSheet data={display[3]} type={display[1]} close={close} userRequest={userRequest} />
+				? <CharacterSheet data={display[3]} type={display[1]} close={close} getLists={getLists} userRequest={userRequest} />
 				: null}
 
 			{(display[0] === "campaign")
-				? <CampaignSheet data={display[3]} type={display[1]} close={close} userRequest={userRequest} />
-				: null}
-
-			{(display[0] === "add_connection")
-				? <Mini label="Campaign Key" rType="Add" char_key={display[2]} close={close} userRequest={userRequest} />
-				: null}
-
-			{(display[0] === "remove_connection")
-				? <Mini label="Character Name" rType="Remove" camp_key={display[2]} close={close} userRequest={userRequest} />
+				? <CampaignSheet data={display[3]} type={display[1]} close={close} getLists={getLists} userRequest={userRequest} />
 				: null}
 		</div>
 	);

@@ -18,8 +18,6 @@
 
 `/char/list` - returns a list of a characters
 
-`/char/add` - adds connection between a campaign and character.
-
 `/char/delete` - deletes a character
 
 `/char/edit` - replaces the data on a character
@@ -32,6 +30,10 @@
 
 `/camp/remove` - removes connection between a campaign and character.
 
+`/camp/add` - adds connection between a campaign and character.
+
 `/camp/delete` - deletes a campaign
 
 `/camp/edit` - replaces the data on a campaign
+
+`/camp/get` - returns only one campaign row
