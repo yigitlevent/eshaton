@@ -88,4 +88,4 @@ This is used during development. Note that you need to run both or individual bu
 
 Please submit your issues to the [issues](https://github.com/yigitlevent/eshaton/issues) page.
 
--   None yet, but I'm sure the server will go down eventually.
+-   None yet, but I'm sure the server will go down ~~eventually~~ soon.

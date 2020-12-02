@@ -1,3 +1,7 @@
+### 0.5.6.2
+
+-   DOC: Missed a very important documentation change.
+
 ### 0.5.6.1
 
 -   DOC: Updated, added table of contents.
