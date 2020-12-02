@@ -70,7 +70,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 
 		const charName = (document.getElementById("c_name") as any).value;
 		const totalDice = firstNumber + secondNumber + modifier;
-		let resultMessage = `Rolled ${(data.attribute) ? `${capitalize(data.attribute.substring(2))}+` : ""}${capitalize(element.innerText.toLowerCase())}. `;
+		let resultMessage = `rolled ${(data.attribute) ? `${capitalize(data.attribute.substring(2))}+` : ""}${capitalize(element.innerText.toLowerCase())}. `;
 
 		if (totalDice < 1) {
 			resultMessage += `Action number is zero, no dice has been rolled.`;

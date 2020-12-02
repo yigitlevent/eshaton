@@ -1,3 +1,7 @@
+### 0.5.4
+
+-   FIX: Actually fixed the previous issue now.
+
 ### 0.5.3
 
 -   FIX: Username mentions are now should be working correctly.

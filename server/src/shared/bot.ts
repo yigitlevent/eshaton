@@ -7,14 +7,10 @@ export function sendRollResult(guildID: string, channelName: string, message: st
 	if (guild) {
 		guild.members.fetch()
 			.then((value) => {
-				const member = value.find((member: GuildMember) => { console.log(member.nickname); console.log(member.displayName); return member.nickname === username; });
-
-				console.log(member);
-
+				const member = value.find((member: GuildMember) => { return member.nickname === username; });
 				const channel = guild.channels.cache.find((channel: Channel) => { return (channel as TextChannel).name === channelName; });
-
 				if (channel && channel.type === "text") {
-					(channel as TextChannel).send(`${(member) ? `<@${member.user.id}> ` : ""}${(member) ? message.charAt(0).toLowerCase() + message.slice(1) : message}`);
+					(channel as TextChannel).send(`${(member) ? `<@${member.user.id}>` : username} ${(member) ? message : message}`);
 				}
 			})
 			.catch((reason) => { console.log(reason); });
