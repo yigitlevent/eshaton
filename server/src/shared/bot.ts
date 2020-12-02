@@ -17,6 +17,9 @@ export function sendRollResult(guildID: string, channelName: string, message: st
 				if (channel && channel.type === "text") {
 					(channel as TextChannel).send(`${(member) ? `<@${member.user.id}> ` : ""}${(member) ? message.charAt(0).toLowerCase() + message.slice(1) : message}`);
 				}
+			})
+			.catch((reason) => {
+				console.log(reason);
 			});
 	}
 }
