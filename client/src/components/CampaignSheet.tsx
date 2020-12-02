@@ -139,7 +139,7 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 			</form>
 
 
-			{(type !== "view") ? <form ref={refAdd} className="campaign-sheet">
+			{(type !== "edit") ? <form ref={refAdd} className="campaign-sheet">
 				<div className="title">ADD CHARACTER</div>
 				<div className="wrapper">
 					<input className="extra id hide" id="s_campaign_id" name="s_campaign_id"
@@ -156,7 +156,7 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				</div>
 			</form> : null}
 
-			{(type !== "view") ? <form ref={refRem} className="campaign-sheet">
+			{(type === "edit") ? <form ref={refRem} className="campaign-sheet">
 				<div className="title">REMOVE CHARACTER</div>
 				<div className="wrapper">
 					<input className="extra id hide" id="s_campaign_id" name="s_campaign_id"

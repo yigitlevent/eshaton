@@ -171,19 +171,31 @@ router.post("/edit",
 
 			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 			try {
-				client.query(
-					"UPDATE characters SET (name, data) = ($1, $2) WHERE secretkey = $3",
-					[c_name, c_data, c_secretkey],
-					async (error, results) => {
-						if (error) {
-							if (!PRODUCTION) { output(error); };
-							return response.status(400).json({ status: "failure", message: "Character edit unsuccessful.", error });
+				const isInCampaign = await client.query(
+					"SELECT campaign FROM characters WHERE secretkey = $1",
+					[c_secretkey])
+					.then((results) => {
+						return results.rows[0].campaign.length !== null;
+					});
+
+				if (isInCampaign) {
+					client.query(
+						"UPDATE characters SET (name, data) = ($1, $2) WHERE secretkey = $3",
+						[c_name, c_data, c_secretkey],
+						async (error, results) => {
+							if (error) {
+								if (!PRODUCTION) { output(error); };
+								return response.status(400).json({ status: "failure", message: "Character edit unsuccessful.", error });
+							}
+							else {
+								return response.status(201).json({ status: "success", message: "Character edit succesful." });
+							}
 						}
-						else {
-							return response.status(201).json({ status: "success", message: "Character edit succesful." });
-						}
-					}
-				);
+					);
+				}
+				else {
+					return response.status(201).json({ status: "success", message: "Character is not in a campaign." });
+				}
 			}
 			catch (err) {
 				return response.status(500).send({ status: "failure", message: "Unforseen error occured.", error: err });
