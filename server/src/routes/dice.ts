@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { SECRET_KEY } from "../app";
 import { discordClient, pool } from "../bin/www";
-import { sendRollResult } from "../bin/www";
+import { sendRollResult } from "../shared/bot";
 
 export const router = express.Router();
 

@@ -4,6 +4,7 @@ import { capitalize } from "../shared/capitalize";
 import { roll } from "../shared/roll";
 
 import { attributes } from "../data/abilities";
+import { toast } from "react-toastify";
 
 export function DiceRoller({ type, event, close, userRequest }: dicerollerprops): JSX.Element {
 	const diceRef = useRef({} as HTMLFormElement);
@@ -78,10 +79,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			const results = roll(totalDice);
 
 			let countText = "";
-			if (totalDice > 0) {
-				countText = `Action .`;
-			}
-			else if (results.countSuccesses === 0 && results.countOnes > 0) {
+			if (results.countSuccesses === 0 && results.countOnes > 0) {
 				countText = `Botch with ${results.countOnes} one${(results.countOnes > 1) ? "s" : ""}.`;
 			}
 			else if (results.countSuccesses < data.difficulty) {
@@ -98,7 +96,8 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			resultMessage += `${countText}`;
 		}
 
-		userRequest("/dice/roll", "dice_roll", { d_charname: charName, d_message: resultMessage });
+		userRequest("/dice/roll", "dice_roll", { d_charname: charName, d_message: resultMessage })
+			.then(() => { toast.success(resultMessage, { autoClose: false, closeOnClick: false }); });
 	};
 
 	const attr = attributes.map((att) => {

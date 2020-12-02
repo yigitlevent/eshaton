@@ -27,7 +27,7 @@ function App(): JSX.Element {
 					const response = JSON.parse(request.response);
 
 					if (response.status === "failure") {
-						if (requestType !== "auth") {
+						if (requestType !== "auth" && requestType !== "dice_roll") {
 							let errorMsg = [response.message];
 
 							if (response.errors) {
@@ -41,6 +41,7 @@ function App(): JSX.Element {
 
 							toast.error(errorMsg.join(" "));
 						}
+						else if (requestType === "dice_roll") { }
 						else {
 							setIsLoggedIn(false);
 						}
