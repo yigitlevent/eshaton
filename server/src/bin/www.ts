@@ -1,6 +1,6 @@
 import http from "http";
 import { Pool } from "pg";
-import Discord, { TextChannel } from "discord.js";
+import Discord, { Channel, TextChannel } from "discord.js";
 
 import { connect } from "../middleware/database";
 import { output } from "../shared/output";
@@ -42,13 +42,13 @@ export function sendRollResult(guildID: string, channelName: string, message: st
 		console.log("2");
 		console.log(guild.name);
 
-		const channel = guild.channels.cache.get(channelName);
+		const channel = guild.channels.cache.find((channel: Channel) => { return (channel as TextChannel).name === channelName; });
 		console.log(channel);
 
 		if (channel && channel.type === "text") {
 			console.log("2");
 			console.log(channel.name);
-			(channel as TextChannel).send(message).then((value) => { console.log("then"); console.log(value); }).catch((reason) => { console.log("reason");console.log(reason); });
+			(channel as TextChannel).send(message).then((value) => { console.log("then"); console.log(value); }).catch((reason) => { console.log("reason"); console.log(reason); });
 		}
 	}
 }
