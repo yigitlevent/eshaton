@@ -60,7 +60,7 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 	useEffect(() => {
 		userRequest("/camp/get", "get_camp", { s_secretkey: data.secretkey })
 			.then((val: any) => {
-				if (val[0].characters) {
+				if (val && val[0] && val[0].characters) {
 					setCharRows((val[0].characters as []).map((character: string, index: number) => {
 						return (
 							<div className="row characters-list" key={val[0].characters_name[index]}>

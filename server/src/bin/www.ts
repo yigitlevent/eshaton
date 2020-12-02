@@ -31,10 +31,25 @@ discordClient.once("ready", () => { console.log("discord ready"); });
 if (PRODUCTION) { discordClient.login(DISCORD_API_TOKEN); }
 
 export function sendRollResult(guildID: string, channelName: string, message: string): void {
+	console.log("1");
+	console.log(guildID);
+	console.log(channelName);
+	console.log(message);
 	const guild = discordClient.guilds.cache.get(guildID);
+	console.log(guild);
 	if (guild) {
+
+		console.log("2");
+		console.log(guild.name);
+
 		const channel = guild.channels.cache.get(channelName);
-		if (channel && channel.type === "text") { (channel as TextChannel).send(message); }
+		console.log(channel);
+
+		if (channel && channel.type === "text") {
+			console.log("2");
+			console.log(channel.name);
+			(channel as TextChannel).send(message).then((value) => { console.log("then"); console.log(value); }).catch((reason) => { console.log("reason");console.log(reason); });
+		}
 	}
 }
 

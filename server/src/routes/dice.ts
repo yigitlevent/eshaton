@@ -36,23 +36,26 @@ router.post("/roll",
 					"SELECT campaign FROM characters WHERE name = $1",
 					[d_charname])
 					.then((results) => {
-						camp_secretkey = results.rows[0].campaign;
-					});
-
-				await client.query(
-					"SELECT * FROM campaigns WHERE secretkey = $1",
-					[camp_secretkey])
-					.then((results) => {
-						if (results.rows[0].discord_enabled && discordClient.readyAt) {
-							sendRollResult(
-								results.rows[0].discord_server,
-								results.rows[0].discord_channel,
-								d_message
-							);
-							return response.status(200).json({ status: "success", message: "Dice result sent." });
+						if (results.rows[0].campaign) {
+							client.query(
+								"SELECT * FROM campaigns WHERE secretkey = $1",
+								[results.rows[0].campaign])
+								.then((results) => {
+									if (results.rows[0].discord_enabled && discordClient.readyAt) {
+										sendRollResult(
+											results.rows[0].discord_server,
+											results.rows[0].discord_channel,
+											d_message
+										);
+										return response.status(200).json({ status: "success", message: "Dice result sent." });
+									}
+									else {
+										return response.status(500).send({ status: "failure", message: "Discord bot is offline." });
+									}
+								});
 						}
 						else {
-							return response.status(500).send({ status: "failure", message: "Discord bot is offline." });
+							return response.status(500).send({ status: "failure", message: "Character does not belong to a campaign." });
 						}
 					});
 			}
