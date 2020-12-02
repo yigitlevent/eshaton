@@ -1,6 +1,6 @@
 import http from "http";
 import { Pool } from "pg";
-import Discord, { Channel, TextChannel } from "discord.js";
+import { Client, Intents } from "discord.js";
 
 import { connect } from "../middleware/database";
 import { output } from "../shared/output";
@@ -24,7 +24,8 @@ pool.on("error", (err: Error): void => { console.log("idle client error", err.me
 connect();
 
 // DISCORD BOT STUFF
-export const discordClient = new Discord.Client();
+const intents = new Intents("GUILD_MEMBERS");
+export const discordClient = new Client({ ws: { intents: intents } });
 discordClient.once("ready", () => { console.log("discord ready"); });
 if (PRODUCTION) { discordClient.login(DISCORD_API_TOKEN); }
 

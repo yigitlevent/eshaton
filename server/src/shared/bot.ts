@@ -5,7 +5,6 @@ import { discordClient } from "../bin/www";
 export function sendRollResult(guildID: string, channelName: string, message: string, username: string): void {
 	const guild = discordClient.guilds.cache.get(guildID);
 	if (guild) {
-
 		guild.members.fetch()
 			.then((value) => {
 				const member = value.find((member: GuildMember) => { console.log(member.nickname); console.log(member.displayName); return member.nickname === username; });
@@ -18,8 +17,6 @@ export function sendRollResult(guildID: string, channelName: string, message: st
 					(channel as TextChannel).send(`${(member) ? `<@${member.user.id}> ` : ""}${(member) ? message.charAt(0).toLowerCase() + message.slice(1) : message}`);
 				}
 			})
-			.catch((reason) => {
-				console.log(reason);
-			});
+			.catch((reason) => { console.log(reason); });
 	}
 }
