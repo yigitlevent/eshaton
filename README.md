@@ -1,5 +1,17 @@
 # Eshaton, a character application for Degenesis
 
+1.  [About](#about)
+2.  [Features](#features)
+3.  [Usage](#usage)
+    1. [Characters](#characters)
+    2. [Campaigns](#campaigns)
+4.  [Links](#links)
+5.  [Self-Hosting](#self-hosting)
+    1. [Scripts](#scripts)
+6.  [Development](#development)
+    1.  [Plans](#plans)
+    2.  [Known Issues](#known-issues)
+
 ## About
 
 [Eshaton](https://eshaton.herokuapp.com/) is a web application that helps players save, upload, download, and view their [Degenesis](https://degenesis.com/) characters. All characters created can be exported as a `.degenesis` (internally `json`) file, or can be stored in the server-side database.
@@ -20,7 +32,7 @@
 
 -   **In-Campaign Characters:** If a character is added to a Campaign, editing feature will be disabled but viewing feature will replace it. You may roll dice via the viewing feature. If the campaign that the character is added has discord features enabled and configured, dice roll will be sent to the channel that is provided.
 
-### Campaign
+### Campaigns
 
 -   **Campaign Sheet:** Gamemasters may create, edit and delete campaigns. A campaign name is required to save it to the database. Campaign names cannot be changed after it is saved to the database.
 
@@ -60,9 +72,10 @@ This is used by Heroku to start the application.
 
 This is used during development. Note that you need to run both or individual build scripts for application to reflect your changes.
 
-## Plans
+## Development
+### Plans
 
--   Actually make use of hot reloading that comes with React, maybe use `concurrently` and such.
+-   Make use of hot reloading that comes with React, maybe use `concurrently` and such.
 -   Custom tooltips instead of browser-style tooltips.
 -   Recheck the server security.
     -   Especially with import/export functionality.
@@ -71,7 +84,7 @@ This is used during development. Note that you need to run both or individual bu
 -   Character portraits should be visible on client-side if players provide a direct link.
 -   Add Cult/Culture/Concept and other details on client-side for hover-over info.
 
-## Known Issues
+### Known Issues
 
 Please submit your issues to the [issues](https://github.com/yigitlevent/eshaton/issues) page.
 

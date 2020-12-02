@@ -1,3 +1,7 @@
+### 0.5.6.1
+
+-   DOC: Updated, added table of contents.
+
 ### 0.5.6
 
 -   FIX: A possible issue where the editing might be available to a character after it is removed from a campaign.
