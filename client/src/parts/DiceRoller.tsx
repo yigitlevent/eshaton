@@ -111,7 +111,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			<div className="background" onClick={() => { close(); }} />
 			<form className="dice-roller" ref={diceRef}>
 				<div className="inner">
-					<div className="title">{`Roll ${capitalize(type)}`}</div>
+					<div className="title">{`Roll ${capitalize((event.target as any).innerText.toLowerCase())}`}</div>
 
 					{(type === "skill")
 						? <Fragment>

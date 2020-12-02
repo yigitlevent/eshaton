@@ -1,3 +1,11 @@
+### 0.5.5
+
+-   FIX: Some SCSS attributes weren't working as intended.
+-   FIX: Origin rows now aren't rollable.
+-   FIX: Rollable row styles are now changed.
+-   FIX: Dice Roller title is now corectly showing name of the clicked ability.
+-   CHANGE: Removed view mode from character sheets that aren't added to a campaign.
+
 ### 0.5.4
 
 -   FIX: Actually fixed the previous issue now.

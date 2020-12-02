@@ -76,7 +76,7 @@ export function Block({ datakey, type, data, userRequest }: blockprops): JSX.Ele
 				{(row.type !== "empty" && row.type !== "condition" && row.type !== "input" && row.type !== "select" && row.type !== "logo")
 					? <div
 						id={`c_${row.name.toLowerCase()}`}
-						className={`${row.type} span-${row.checkboxes + 1} ${(row.dice) ? "rollable" : ""}`}
+						className={`${row.type} span-${row.checkboxes + 1} ${(type === "view" && row.dice) ? "rollable" : ""}`}
 						onClick={(event) => { if (row.dice) { openDiceRoller(event, row.dice); } }}
 					>
 						{row.name.toUpperCase()}

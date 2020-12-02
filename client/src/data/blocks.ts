@@ -111,12 +111,12 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 
 	"origins": [
 		{ name: "Origins", type: "title", checkboxes: 0 },
-		{ name: "Allies", type: "normal", checkboxes: 6, dice: "origin" },
-		{ name: "Authority", type: "normal", checkboxes: 6, dice: "origin" },
-		{ name: "Network", type: "normal", checkboxes: 6, dice: "origin" },
-		{ name: "Renown", type: "normal", checkboxes: 6, dice: "origin" },
-		{ name: "Resource", type: "normal", checkboxes: 6, dice: "origin" },
-		{ name: "Secrets", type: "normal", checkboxes: 6, dice: "origin" }
+		{ name: "Allies", type: "normal", checkboxes: 6 },
+		{ name: "Authority", type: "normal", checkboxes: 6 },
+		{ name: "Network", type: "normal", checkboxes: 6 },
+		{ name: "Renown", type: "normal", checkboxes: 6 },
+		{ name: "Resource", type: "normal", checkboxes: 6 },
+		{ name: "Secrets", type: "normal", checkboxes: 6 }
 	],
 
 	"potentials": [

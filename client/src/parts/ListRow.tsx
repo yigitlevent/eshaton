@@ -10,7 +10,13 @@ export function ListRow({ rowData, setDisplay }: listrowprops): JSX.Element {
 
 			<span className="name">{rowData.data.name}</span>
 
-			{(rowData.data.campaign_name && rowData.data.campaign_name.length > 0) ? <div />
+			{(rowData.data.campaign_name && rowData.data.campaign_name.length > 0)
+				? <input className="button view" title="View" type="button" value=""
+					onClick={() => {
+						setDisplay(["none", "none", "", {}]);
+						setDisplay([rowData.type, "view", rowData.data.secretkey, rowData.data]);
+					}}
+				/>
 				: <input className="button edit" title="Edit" type="button" value=""
 					onClick={() => {
 						setDisplay(["none", "none", "", {}]);
@@ -18,13 +24,6 @@ export function ListRow({ rowData, setDisplay }: listrowprops): JSX.Element {
 					}}
 				/>
 			}
-
-			<input className="button view" title="View" type="button" value=""
-				onClick={() => {
-					setDisplay(["none", "none", "", {}]);
-					setDisplay([rowData.type, "view", rowData.data.secretkey, rowData.data]);
-				}}
-			/>
 
 			<input className="button delete" title="Delete" type="button" value=""
 				onClick={() => {

@@ -43,7 +43,7 @@ $color-text-redder: #aa2626 !default;
 			}
 
 			&.items-list {
-				grid-template-columns: 20px 20px auto 20px 20px 20px;
+				grid-template-columns: 20px 20px auto 20px 20px;
 			}
 
 			&.characters-list,
@@ -570,7 +570,7 @@ a {
 				display: flex;
 				flex-flow: row wrap;
 				justify-content: center;
-				align-items: center;
+				align-items: start;
 				align-content: center;
 
 				& > .basic-text {
@@ -804,7 +804,11 @@ a {
 
 						& > .rollable {
 							cursor: pointer;
-							color: $color-text-redder;
+
+							&:before {
+								content: "⯈ ";
+								color: $color-text-redder;
+							}
 						}
 					}
 				}
