@@ -70,13 +70,15 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 
 		const charName = (document.getElementById("c_name") as any).value;
 		const totalDice = firstNumber + secondNumber + modifier;
-		let resultMessage = `@${charName} rolled ${(data.attribute) ? `${capitalize(data.attribute.substring(2))}+` : ""}${capitalize(element.innerText.toLowerCase())}. `;
+		let resultMessage = `Rolled ${(data.attribute) ? `${capitalize(data.attribute.substring(2))}+` : ""}${capitalize(element.innerText.toLowerCase())}. `;
 
 		if (totalDice < 1) {
 			resultMessage += `Action number is zero, no dice has been rolled.`;
 		}
 		else {
 			const results = roll(totalDice);
+
+			resultMessage += `Results: ${results.results.join(", ")}. `;
 
 			let countText = "";
 			if (results.countSuccesses === 0 && results.countOnes > 0) {
@@ -96,7 +98,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			resultMessage += `${countText}`;
 		}
 
-		userRequest("/dice/roll", "dice_roll", { d_charname: charName, d_message: resultMessage })
+		userRequest("/dice/roll", "dice_roll", { d_charname: charName, d_message: resultMessage, d_display_name: charName })
 			.then(() => { toast.success(resultMessage, { autoClose: false, closeOnClick: false }); });
 	};
 

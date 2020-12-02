@@ -1,3 +1,7 @@
+### 0.5.3
+
+-   FIX: Username mentions are now should be working correctly.
+
 ### 0.5.2
 
 -   FEATURE: Dice rolls are now shown on client-side as a toast.

@@ -14,7 +14,8 @@ router.post("/roll",
 			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 letters.")
 			.not().isEmpty().withMessage("Character name cannot be empty.")
 			.matches(/^[A-Za-z\s]+$/).withMessage("Character name must be alphabetic."),
-		check("d_message").trim().escape().not().isEmpty().withMessage("Message cannot be empty.")
+		check("d_message").trim().escape().not().isEmpty().withMessage("Message cannot be empty."),
+		check("d_display_name").trim().escape().not().isEmpty().withMessage("Character name cannot be empty.")
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -26,7 +27,7 @@ router.post("/roll",
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
-			const { d_charname, d_message } = request.body;
+			const { d_charname, d_message, d_display_name } = request.body;
 
 			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 			try {
@@ -45,7 +46,8 @@ router.post("/roll",
 										sendRollResult(
 											results.rows[0].discord_server,
 											results.rows[0].discord_channel,
-											d_message
+											d_message,
+											d_display_name
 										);
 										return response.status(200).json({ status: "success", message: "Dice result sent." });
 									}
