@@ -27,6 +27,9 @@ export async function connect(): Promise<void> {
 			secretkey CHAR(32) UNIQUE NOT NULL,
 			characters VARCHAR[],
 			characters_name VARCHAR[],
+			discord_enabled BOOLEAN,
+			discord_server VARCHAR,
+			discord_channel VARCHAR,
 			created TIMESTAMP DEFAULT NULL
 		)`)
 		.then((res: QueryResult<any>) => { if (!PRODUCTION) { output("Table 'campaigns' created.", "yellow"); } })

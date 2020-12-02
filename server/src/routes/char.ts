@@ -12,7 +12,7 @@ export const router = express.Router();
 router.post("/new",
 	[
 		check("c_name").trim().escape()
-			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 characters.")
+			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 letters.")
 			.not().isEmpty().withMessage("Character name cannot be empty.")
 			.matches(/^[A-Za-z\s]+$/).withMessage("Character name must be alphabetic."),
 		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
@@ -151,7 +151,7 @@ router.post("/delete",
 router.post("/edit",
 	[
 		check("c_name").trim().escape()
-			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 characters.")
+			.isLength({ min: 3, max: 32 }).withMessage("Character name must be between 3 and 32 letters.")
 			.not().isEmpty().withMessage("Character name cannot be empty.")
 			.matches(/^[A-Za-z\s]+$/).withMessage("Character name must be alphabetic."),
 		check("c_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),

@@ -121,39 +121,39 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 
 			<Divider>{`ARCHETYPE`}</Divider>
 			<div className="wrapper">
-				<Block datakey={"main-left"} type={type} data={data} />
-				<Block datakey={"main-center"} type={type} data={data} />
-				<Block datakey={"main-right"} type={type} data={data} />
+				<Block datakey={"main-left"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"main-center"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"main-right"} type={type} data={data} userRequest={userRequest} />
 			</div>
 
 			<div className="wrapper">
-				<Block datakey={"culture"} type={type} data={data} />
-				<Block datakey={"concept"} type={type} data={data} />
-				<Block datakey={"cult"} type={type} data={data} />
+				<Block datakey={"culture"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"concept"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"cult"} type={type} data={data} userRequest={userRequest} />
 			</div>
 
 			<Divider>{`ATTRIBUTES & SKILLS`}</Divider>
 			<div className="wrapper">
-				<Block datakey={"body"} type={type} data={data} />
-				<Block datakey={"agility"} type={type} data={data} />
-				<Block datakey={"charisma"} type={type} data={data} />
-				<Block datakey={"intellect"} type={type} data={data} />
-				<Block datakey={"psyche"} type={type} data={data} />
-				<Block datakey={"instinct"} type={type} data={data} />
+				<Block datakey={"body"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"agility"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"charisma"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"intellect"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"psyche"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"instinct"} type={type} data={data} userRequest={userRequest} />
 			</div>
 
 			<Divider>{`ADVANTAGES`}</Divider>
 			<div className="wrapper">
-				<Block datakey={"origins"} type={type} data={data} />
-				<Block datakey={"potentials"} type={type} data={data} />
-				<Block datakey={"scars"} type={type} data={data} />
+				<Block datakey={"origins"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"potentials"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"scars"} type={type} data={data} userRequest={userRequest} />
 			</div>
 
 			<Divider>{`CONDITION`}</Divider>
 			<div className="wrapper">
-				<Block datakey={"modifiers"} type={type} data={data} />
-				<Block datakey={"conditions"} type={type} data={data} />
-				<Block datakey={"complications"} type={type} data={data} />
+				<Block datakey={"modifiers"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"conditions"} type={type} data={data} userRequest={userRequest} />
+				<Block datakey={"complications"} type={type} data={data} userRequest={userRequest} />
 			</div>
 
 			<Divider>{`ARSENAL`}</Divider>

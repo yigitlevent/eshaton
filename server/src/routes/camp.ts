@@ -12,10 +12,13 @@ export const router = express.Router();
 router.post("/new",
 	[
 		check("s_name", "Campaign name cannot be empty.").trim().escape()
-			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 characters.")
+			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 letters.")
 			.not().isEmpty().withMessage("Campaign name cannot be empty.")
 			.matches(/^[A-Za-z\s]+$/).withMessage("Campaign name must be alphabetic."),
-		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("s_discord_enabled", "Invalid value.").trim().escape().not().isEmpty().isBoolean(),
+		check("s_discord_server", "Invalid discord server id.").trim().escape(),
+		check("s_discord_channel", "Invalid discord channel name.").trim().escape()
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -28,15 +31,15 @@ router.post("/new",
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
 			const _username: string = decoded.username;
-			const { s_name, s_secretkey } = request.body;
+			const { s_name, s_secretkey, s_discord_enabled, s_discord_server, s_discord_channel } = request.body;
 
 			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 			try {
 				const dateTime = getDateTime();
 
 				client.query(
-					"INSERT INTO campaigns (name, creator, secretkey, created ) VALUES ($1, $2, $3, $4)",
-					[s_name, _username, s_secretkey, dateTime],
+					"INSERT INTO campaigns (name, creator, secretkey, created, discord_enabled, discord_server, discord_channel ) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+					[s_name, _username, s_secretkey, dateTime, s_discord_enabled, s_discord_server, s_discord_channel],
 					async (error, results) => {
 						if (error) {
 							if (!PRODUCTION) { output(error); };
@@ -246,10 +249,13 @@ router.post("/delete",
 router.post("/edit",
 	[
 		check("s_name", "Campaign name cannot be empty.").trim().escape()
-			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 characters.")
+			.isLength({ min: 3, max: 32 }).withMessage("Campaign name must be between 3 and 32 letters.")
 			.not().isEmpty().withMessage("Campaign name cannot be empty.")
 			.matches(/^[A-Za-z\s]+$/).withMessage("Campaign name must be alphabetic."),
-		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 })
+		check("s_secretkey", "Invalid character secret key.").trim().escape().not().isEmpty().isLength({ min: 32, max: 32 }),
+		check("s_discord_enabled", "Invalid value.").trim().escape().not().isEmpty().isBoolean(),
+		check("s_discord_server", "Invalid discord server id.").trim().escape(),
+		check("s_discord_channel", "Invalid discord channel name.").trim().escape()
 	],
 	async (request: express.Request, response: express.Response) => {
 		const errors: Result<ValidationError> = validationResult(request);
@@ -261,13 +267,13 @@ router.post("/edit",
 			const decoded: any = jwt.verify(access_token, (SECRET_KEY as string));
 			if (!decoded) { return response.status(400).json({ status: "failure", message: "No cookies exist." }); }
 
-			const { s_name, s_secretkey } = request.body;
+			const { s_name, s_discord_enabled, s_discord_server, s_discord_channel, s_secretkey } = request.body;
 
 			const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 			try {
 				client.query(
-					"UPDATE campaigns SET name = $1 WHERE secretkey = $2",
-					[s_name, s_secretkey],
+					"UPDATE campaigns SET (name, discord_enabled, discord_server, discord_channel ) = ($1, $2, $3, $4) WHERE secretkey = $5",
+					[s_name, s_discord_enabled, s_discord_server, s_discord_channel, s_secretkey],
 					async (error, results) => {
 						if (error) {
 							if (!PRODUCTION) { output(error); };

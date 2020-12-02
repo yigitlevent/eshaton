@@ -2,7 +2,7 @@
 
 ## About
 
-Eshaton is a web application that helps players save, upload, download, and view their [Degenesis](https://degenesis.com/) characters. All characters created can be exported as a `.degenesis` (internally `json`) file, or can be stored in the application database.
+Eshaton is a web application that helps players save, upload, download, and view their [Degenesis](https://degenesis.com/) characters. All characters created can be exported as a `.degenesis` (internally `json`) file, or can be stored in the server-side database.
 
 ## Self-hosting
 

@@ -16,7 +16,7 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 		setListCount(l => l + 1);
 	}, []);
 
-	const getData = (ref: any): { s_name: string; s_secretkey: string; c_secretkey: string; } => {
+	const getData = (ref: any): { s_name: string; s_secretkey: string; c_secretkey: string; s_discord_enabled: boolean; s_discord_server: string; s_discord_channel: string; } => {
 		let testObject: { [key: string]: string | boolean; } = {};
 
 		for (let i = 0; i < ref.current.length; i++) {
@@ -33,7 +33,10 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 		return {
 			s_name: (testObject.s_campaign_name as string),
 			s_secretkey: (testObject.s_campaign_id as string),
-			c_secretkey: (testObject.key as string)
+			c_secretkey: (testObject.key as string),
+			s_discord_enabled: (testObject.s_discord_enabled as boolean),
+			s_discord_server: (testObject.s_discord_server as string),
+			s_discord_channel: (testObject.s_discord_channel as string)
 		};
 	};
 
@@ -94,11 +97,38 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				</div>
 
 				<div className="wrapper">
-					<label className="extra">Campaign Name: </label>
+					<label className="extra">Campaign Name:</label>
 					<input className="extra" type="text" id="s_campaign_name" name="s_campaign_name"
 						key={data.name}
 						defaultValue={(data && type !== "new") ? data.name : null}
 						readOnly={(type !== "new") ? true : false}
+					/>
+				</div>
+
+				<div className="wrapper">
+					<label className="extra">Discord Bot Integration Enabled:</label>
+					<input className="extra" type="checkbox" id="s_discord_enabled" name="s_discord_enabled"
+						key={data.discord_enabled}
+						defaultChecked={(data && type !== "new") ? data.discord_enabled : false}
+						disabled={(type === "view" || type === "delete") ? true : false}
+					/>
+				</div>
+
+				<div className="wrapper">
+					<label className="extra">Discord Server ID:</label>
+					<input className="extra" type="text" id="s_discord_server" name="s_discord_server"
+						key={data.discord_server}
+						defaultValue={(data && type !== "new") ? data.discord_server : null}
+						readOnly={(type === "view" || type === "delete") ? true : false}
+					/>
+				</div>
+
+				<div className="wrapper">
+					<label className="extra">Discord Channel Name:</label>
+					<input className="extra" type="text" id="s_discord_channel" name="s_discord_channel"
+						key={data.s_discord_channel}
+						defaultValue={(data && type !== "new") ? data.discord_channel : null}
+						readOnly={(type === "view" || type === "delete") ? true : false}
 					/>
 				</div>
 

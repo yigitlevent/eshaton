@@ -1,8 +1,8 @@
-### Main Route
+### main Route
 
 `/` - returns main page.
 
-### User Route
+### user Route
 
 `/user/register` - registers user
 
@@ -12,7 +12,7 @@
 
 `/user/logout` - logs the user out
 
-### Char Route
+### char Route
 
 `/char/new` - creates a new character
 
@@ -22,7 +22,7 @@
 
 `/char/edit` - replaces the data on a character
 
-### Camp Route
+### camp Route
 
 `/camp/new` - creates a new campaign
 
@@ -37,3 +37,7 @@
 `/camp/edit` - replaces the data on a campaign
 
 `/camp/get` - returns only one campaign row
+
+### dice Route
+
+`/dice/roll` - rolls a dice, and if enabled in the campaign, sends the result to discord.

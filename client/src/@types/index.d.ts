@@ -20,7 +20,7 @@ interface coordinate {
 type displaytype = "none" | "new" | "edit" | "view" | "delete";
 type displayelement = "none" | "character" | "campaign" | "add_connection" | "remove_connection";
 
-type requests = "register" | "login" | "auth" | "logout" | "add_connection" | "remove_connection"
+type requests = "register" | "login" | "auth" | "logout" | "add_connection" | "remove_connection" | "dice_roll"
 	| "new_char" | "list_char" | "edit_char" | "delete_char"
 	| "new_camp" | "list_camp" | "edit_camp" | "delete_camp" | "get_camp";
 
@@ -30,6 +30,7 @@ interface blockrow {
 	checkboxes: 0 | 3 | 6 | 12 | 24;
 	placeholder?: boolean;
 	selectdata?: string[];
+	dice?: "attribute" | "skill" | "origin";
 }
 
 interface tabledata {
@@ -37,21 +38,16 @@ interface tabledata {
 	columns: string[];
 }
 
-interface registrationform {
-	r_username: string;
-	r_email: string;
-	r_password: string;
-	r_passwordrepeat: string;
-}
-
-interface loginform {
-	l_username: string;
-	l_password: string;
+interface dicerollerprops {
+	type: string;
+	event: React.MouseEvent<HTMLDivElement, MouseEvent>;
+	close: () => void;
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface entranceprops {
 	setIsLogin: (b: boolean) => void;
-	userRequest: (path: string, requestType: requests, data?: registrationform | loginform) => Promise<any[] | boolean>;
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface sheetprops {
@@ -66,6 +62,7 @@ interface blockprops {
 	datakey: string;
 	type: string;
 	data: any;
+	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
 interface tableprops {

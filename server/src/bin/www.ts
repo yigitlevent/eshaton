@@ -1,10 +1,11 @@
 import http from "http";
 import { Pool } from "pg";
+import Discord, { TextChannel } from "discord.js";
 
 import { connect } from "../middleware/database";
 import { output } from "../shared/output";
 
-import { app, PRODUCTION, PORT, DATABASE_URL, SECRET_KEY } from "../app";
+import { app, PRODUCTION, PORT, DATABASE_URL, SECRET_KEY, DISCORD_API_TOKEN } from "../app";
 
 if (!PRODUCTION) {
 	output(PRODUCTION, "yellow");
@@ -15,17 +16,29 @@ if (!PRODUCTION) {
 
 const server = http.createServer(app);
 
-export const pool = new Pool({
-	connectionString: DATABASE_URL,
-	ssl: (PRODUCTION) ? { rejectUnauthorized: false } : false
-});
+// DATABASE STUFF
+export const pool = new Pool({ connectionString: DATABASE_URL, ssl: (PRODUCTION) ? { rejectUnauthorized: false } : false });
 
-pool.on("error", (err: Error): void => {
-	console.log("idle client error", err.message, err.stack);
-});
+pool.on("error", (err: Error): void => { console.log("idle client error", err.message, err.stack); });
 
 connect();
 
+// DISCORD BOT STUFF
+export const discordClient = new Discord.Client();
+
+discordClient.once("ready", () => { console.log("discord ready"); });
+
+if (PRODUCTION) { discordClient.login(DISCORD_API_TOKEN); }
+
+export function sendRollResult(guildID: string, channelName: string, message: string): void {
+	const guild = discordClient.guilds.cache.get(guildID);
+	if (guild) {
+		const channel = guild.channels.cache.get(channelName);
+		if (channel && channel.type === "text") { (channel as TextChannel).send(message); }
+	}
+}
+
+// ACTUALLY IMPORTANT STUFF
 if (PRODUCTION) { server.listen((PORT as number)); }
 else { server.listen((PORT as number), "localhost"); }
 
