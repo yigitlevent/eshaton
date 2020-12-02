@@ -24,7 +24,7 @@ pool.on("error", (err: Error): void => { console.log("idle client error", err.me
 connect();
 
 // DISCORD BOT STUFF
-const intents = new Intents("GUILD_MEMBERS");
+const intents = new Intents([Intents.NON_PRIVILEGED, "GUILD_MEMBERS"]);
 export const discordClient = new Client({ ws: { intents: intents } });
 discordClient.once("ready", () => { console.log("discord ready"); });
 if (PRODUCTION) { discordClient.login(DISCORD_API_TOKEN); }
