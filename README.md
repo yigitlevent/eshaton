@@ -46,7 +46,7 @@
 
     3. **Add Server ID:** Enter your Server ID (which can be found under `Server Settings > Widget > Server ID`, example: `1234567890`) into `Discord Server ID` box.
 
-    4. **Add Channel Name:** Enter name of the channel that you want the bot to send the messages (without the hashtag, example: `dice-rolls`) into `Discord Server ID` box.
+    4. **Add Channel Name:** Enter name of the channel that you want the bot to send the messages (without the hashtag, example: `dice-rolls`) into `Discord Channel Name` box.
 
 ## Links
 

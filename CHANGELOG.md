@@ -1,3 +1,8 @@
+### 0.5.8.1
+
+-   **FIX:** Package version updated.
+-   **DOC:** Documentation fixes.
+
 ### 0.5.8
 
 -   **FEATURE:** Now users can use hot-reloading both for server and client with only one command: `npm run dev`.
