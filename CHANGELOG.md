@@ -1,3 +1,7 @@
+### 0.5.8.2
+
+-   **FIX:** A possible fix to Heroku deployment.
+
 ### 0.5.8.1
 
 -   **FIX:** Package version updated.

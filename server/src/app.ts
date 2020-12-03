@@ -20,11 +20,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-if (PRODUCTION) {
-	app.use(express.static(app.get("publicPath")));
-	app.use("/", IndexRouter);
-}
-
+app.use(express.static(app.get("publicPath")));
+app.use("/", IndexRouter);
 app.use("/user", UserRouter);
 app.use("/char", CharacterRouter);
 app.use("/camp", CampaignRouter);
