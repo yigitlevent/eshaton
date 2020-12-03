@@ -34,7 +34,7 @@ function App(): JSX.Element {
 								errorMsg.push(...(response.errors.map((error: any) => { return (error.msg); })));
 							}
 
-							if (response.error) {
+							if (response.error && response.error.detail) {
 								let det = response.error.detail.replace(/=/g, ' ').replace(/\(|\)/g, '').substring(4);
 								errorMsg.push(det.charAt(0).toUpperCase() + det.slice(1));
 							}

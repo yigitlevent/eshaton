@@ -9,8 +9,6 @@ import { router as CharacterRouter } from "./routes/char";
 import { router as CampaignRouter } from "./routes/camp";
 import { router as DiceRouter } from "./routes/dice";
 
-import { PRODUCTION } from "./bin/www";
-
 export const app: express.Application = express();
 
 app.set("publicPath", path.join(__dirname, "../../client/build"));

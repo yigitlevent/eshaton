@@ -175,10 +175,10 @@ router.post("/edit",
 					"SELECT campaign FROM characters WHERE secretkey = $1",
 					[c_secretkey])
 					.then((results) => {
-						return results.rows[0].campaign.length !== null;
+						return results.rows[0].campaign !== null;
 					});
 
-				if (isInCampaign) {
+				if (!isInCampaign) {
 					client.query(
 						"UPDATE characters SET (name, data) = ($1, $2) WHERE secretkey = $3",
 						[c_name, c_data, c_secretkey],

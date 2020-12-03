@@ -1,3 +1,9 @@
+### 0.5.9
+
+-   **FIX:** Added a check for `undefined` response errors list.
+-   **FIX:** Fixed an issue with `/char/edit` route.
+-   **FIX:** Some clean up.
+
 ### 0.5.8.2
 
 -   **FIX:** A possible fix to Heroku deployment.
