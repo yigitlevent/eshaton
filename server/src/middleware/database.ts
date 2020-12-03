@@ -1,9 +1,6 @@
-import { QueryResult } from "pg";
-
 import { output } from "../shared/output";
-import { pool } from "../bin/www";
 
-import { PRODUCTION } from "../app";
+import { pool, PRODUCTION } from "../bin/www";
 
 export async function connect(): Promise<void> {
 	const client = await pool.connect().catch((err: Error) => { throw console.log(err); });

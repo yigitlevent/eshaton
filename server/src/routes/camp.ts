@@ -2,10 +2,10 @@ import express from "express";
 import { check, ValidationError, Result, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import { PRODUCTION, SECRET_KEY } from "../app";
 import { getDateTime } from "../shared/datetime";
-import { pool } from "../bin/www";
 import { output } from "../shared/output";
+
+import { pool, PRODUCTION, SECRET_KEY } from "../bin/www";
 
 export const router = express.Router();
 

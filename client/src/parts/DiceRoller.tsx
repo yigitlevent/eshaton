@@ -36,8 +36,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 		let firstNumber = 0;
 		let secondNumber = 0;
 		let modifier = 0;
-		let isSkillRoll = false;
-
+		
 		let next = (element.nextElementSibling as HTMLInputElement);
 		let isNext = next.classList.contains("checkbox") === true;
 
@@ -54,7 +53,6 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 		}
 
 		if (data.attribute) {
-			isSkillRoll = true;
 			let attr = data.attribute;
 			let attrEl = document.getElementById(attr);
 
@@ -87,7 +85,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			else if (results.countSuccesses < data.difficulty) {
 				countText = `Failed with ${results.countSuccesses} success${(results.countSuccesses > 1) ? "es" : ""} against a difficulty of ${data.difficulty}.`;
 			}
-			else if (results.countSuccesses == data.difficulty) {
+			else if (results.countSuccesses === data.difficulty) {
 				countText = `Tied with ${results.countSuccesses} success${(results.countSuccesses > 1) ? "es" : ""} against a difficulty of ${data.difficulty}.`;
 			}
 			else if (results.countSuccesses >= data.difficulty) {

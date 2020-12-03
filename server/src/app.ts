@@ -9,11 +9,7 @@ import { router as CharacterRouter } from "./routes/char";
 import { router as CampaignRouter } from "./routes/camp";
 import { router as DiceRouter } from "./routes/dice";
 
-export const PRODUCTION = (process.env.ENV as string === "production") || false;
-export const PORT = normalizePort(process.env.PORT) || normalizePort(3000);
-export const DATABASE_URL = (process.env.DATABASE_URL as string) || "postgresql://testuser:testpassword@localhost:5432/eshaton_test";
-export const SECRET_KEY = (process.env.SECRET_KEY as string) || "test_secret_key";
-export const DISCORD_API_TOKEN = (process.env.DISCORD_API_TOKEN as string) || "lmao";
+import { PRODUCTION } from "./bin/www";
 
 export const app: express.Application = express();
 
@@ -23,17 +19,13 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static(app.get("publicPath")));
 
-app.use("/", IndexRouter);
+if (PRODUCTION) {
+	app.use(express.static(app.get("publicPath")));
+	app.use("/", IndexRouter);
+}
+
 app.use("/user", UserRouter);
 app.use("/char", CharacterRouter);
 app.use("/camp", CampaignRouter);
 app.use("/dice", DiceRouter);
-
-function normalizePort(val: any): number | boolean {
-	const port = parseInt(val, 10);
-	if (isNaN(port)) { return val; }
-	if (port >= 0) { return port; }
-	return false;
-}

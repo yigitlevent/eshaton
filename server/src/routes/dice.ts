@@ -2,9 +2,9 @@ import express from "express";
 import { check, ValidationError, Result, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import { SECRET_KEY } from "../app";
-import { discordClient, pool } from "../bin/www";
 import { sendRollResult } from "../shared/bot";
+
+import { discordClient, pool, SECRET_KEY } from "../bin/www";
 
 export const router = express.Router();
 

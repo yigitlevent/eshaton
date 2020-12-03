@@ -3,9 +3,9 @@ import { check, ValidationError, Result, validationResult } from "express-valida
 import jwt from "jsonwebtoken";
 
 import { getDateTime } from "../shared/datetime";
-import { pool } from "../bin/www";
-import { PRODUCTION, SECRET_KEY } from "../app";
 import { output } from "../shared/output";
+
+import { pool, PRODUCTION, SECRET_KEY } from "../bin/www";
 
 export const router = express.Router();
 

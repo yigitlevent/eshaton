@@ -26,15 +26,15 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	useEffect(() => {
 		userRequest("/char/list", "list_char")
 			.then((val) => {
-				setCharRows((val as any[]).map((row: any) => {
-					return <ListRow rowData={{ data: row, datetime: row.created.split("T"), type: "character" } as rowDataset} setDisplay={setDisplay} />;
+				setCharRows((val as any[]).map((row: any, index: number) => {
+					return <ListRow key={index} rowData={{ data: row, datetime: row.created.split("T"), type: "character" } as rowDataset} setDisplay={setDisplay} />;
 				}));
 			});
 
 		userRequest("/camp/list", "list_camp")
 			.then((val) => {
-				setCampRows((val as any[]).map((row: any) => {
-					return <ListRow rowData={{ data: row, datetime: row.created.split("T"), type: "campaign" } as rowDataset} setDisplay={setDisplay} />;
+				setCampRows((val as any[]).map((row: any, index: number) => {
+					return <ListRow key={index} rowData={{ data: row, datetime: row.created.split("T"), type: "campaign" } as rowDataset} setDisplay={setDisplay} />;
 				}));
 			});
 	}, [listCount, userRequest]);

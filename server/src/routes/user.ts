@@ -3,10 +3,10 @@ import { check, ValidationError, Result, validationResult } from "express-valida
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import { PRODUCTION, SECRET_KEY } from "../app";
 import { getDateTime } from "../shared/datetime";
-import { pool } from "../bin/www";
 import { output } from "../shared/output";
+
+import { pool, PRODUCTION, SECRET_KEY } from "../bin/www";
 
 export const router = express.Router();
 
@@ -65,7 +65,7 @@ router.post("/login",
 
 		const { l_username, l_password } = request.body;
 
-		
+
 		const client = await pool.connect().catch((err: Error) => { throw console.log(err); });
 		try {
 			client.query(

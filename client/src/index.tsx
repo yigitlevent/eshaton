@@ -23,7 +23,7 @@ function App(): JSX.Element {
 			else { request.send(); }
 
 			request.onreadystatechange = () => {
-				if (request.readyState === XMLHttpRequest.DONE) {
+				if (request.readyState === XMLHttpRequest.DONE && request.response) {
 					const response = JSON.parse(request.response);
 
 					if (response.status === "failure") {
