@@ -1,3 +1,8 @@
+### 0.5.9.1
+
+-   **FIX:** Package version updated.
+-   **FIX:** Removed `.vscode` from git.
+
 ### 0.5.9
 
 -   **FIX:** Added a check for `undefined` response errors list.
