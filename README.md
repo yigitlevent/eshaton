@@ -70,12 +70,12 @@ This is used by Heroku to start the application.
 
 #### npm run dev
 
-This is used during development. Note that you need to run both or individual build scripts for application to reflect your changes.
+This is used during development. This starts both the server (on port `4000`), and the client (on port `3000`).
 
 ## Development
+
 ### Plans
 
--   Make use of hot reloading that comes with React, maybe use `concurrently` and such.
 -   Custom tooltips instead of browser-style tooltips.
 -   Recheck the server security.
     -   Especially with import/export functionality.
