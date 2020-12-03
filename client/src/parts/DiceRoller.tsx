@@ -1,10 +1,10 @@
 import { Fragment, useRef } from "react";
+import { toast } from "react-toastify";
 
-import { capitalize } from "../shared/capitalize";
+import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
 import { roll } from "../shared/roll";
 
 import { attributes } from "../data/abilities";
-import { toast } from "react-toastify";
 
 export function DiceRoller({ type, event, close, userRequest }: dicerollerprops): JSX.Element {
 	const diceRef = useRef({} as HTMLFormElement);
@@ -70,7 +70,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 
 		const charName = (document.getElementById("c_name") as any).value;
 		const totalDice = firstNumber + secondNumber + modifier;
-		let resultMessage = `rolled ${(data.attribute) ? `${capitalize(data.attribute.substring(2))}+` : ""}${capitalize(element.innerText.toLowerCase())}. `;
+		let resultMessage = `rolled ${(data.attribute) ? `${capitalizeFirstLetter(data.attribute.substring(2))}+` : ""}${capitalizeFirstLetter(element.innerText.toLowerCase())}. `;
 
 		if (totalDice < 1) {
 			resultMessage += `Action number is zero, no dice has been rolled.`;
@@ -103,7 +103,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 	};
 
 	const attr = attributes.map((att) => {
-		return <option value={`c_${att}`}>{capitalize(att)}</option>;
+		return <option value={`c_${att}`}>{capitalizeFirstLetter(att)}</option>;
 	});
 
 	return (
@@ -111,7 +111,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 			<div className="background" onClick={() => { close(); }} />
 			<form className="dice-roller" ref={diceRef}>
 				<div className="inner">
-					<div className="title">{`Roll ${capitalize((event.target as any).innerText.toLowerCase())}`}</div>
+					<div className="title">{`Roll ${capitalizeFirstLetter((event.target as any).innerText.toLowerCase())}`}</div>
 
 					{(type === "skill")
 						? <Fragment>

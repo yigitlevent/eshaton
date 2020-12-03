@@ -1,4 +1,4 @@
-import http from "http";
+import { createServer } from "http";
 import { Pool } from "pg";
 import { Client, Intents } from "discord.js";
 
@@ -14,7 +14,7 @@ if (!PRODUCTION) {
 	output(SECRET_KEY, "yellow");
 }
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 // DATABASE STUFF
 export const pool = new Pool({ connectionString: DATABASE_URL, ssl: (PRODUCTION) ? { rejectUnauthorized: false } : false });

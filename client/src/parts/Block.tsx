@@ -1,17 +1,18 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 
-import { BLOCKS } from "../data/blocks";
 import { DiceRoller } from "./DiceRoller";
 import { Select } from "./Select";
 
+import { BLOCKS } from "../data/blocks";
+
 export function Block({ datakey, type, data, userRequest }: blockprops): JSX.Element {
 	const imgRef: React.MutableRefObject<HTMLImageElement> | React.MutableRefObject<null> = useRef(null);
-	const [imgSrc, setImgSrc] = useState(`./assets/icons/empty.svg`);
+	const [imgSrc, setImgSrc] = useState(`${process.env.PUBLIC_URL}/assets/icons/empty.svg`);
 	const [diceRoller, setDiceRoller] = useState(<Fragment />);
 
 	const selectChange = (event: React.ChangeEvent<HTMLSelectElement>, rowName: string): void => {
-		if (event.target.value === "") { setImgSrc(`./assets/icons/empty.svg`); }
-		else { setImgSrc(`./assets/icons/${rowName}s/${event.target.value}.svg`); }
+		if (event.target.value === "") { setImgSrc(`${process.env.PUBLIC_URL}/assets/icons/empty.svg`); }
+		else { setImgSrc(`${process.env.PUBLIC_URL}/assets/icons/${rowName}s/${event.target.value}.svg`); }
 	};
 
 	const checkboxPropogation = (event: React.MouseEvent<HTMLInputElement, MouseEvent>): void => {
@@ -21,9 +22,7 @@ export function Block({ datakey, type, data, userRequest }: blockprops): JSX.Ele
 		let isNext = element.nextElementSibling?.classList.contains("checkbox") === true;
 		let isNextChecked = (isNext) ? (element.nextElementSibling as HTMLInputElement).checked : false;
 
-		if (!element.checked && !isPrev && isNext && !isNextChecked) {
-			element.checked = false;
-		}
+		if (!element.checked && !isPrev && isNext && !isNextChecked) { element.checked = false; }
 		else if (element.checked && isPrev) {
 			element.checked = true;
 			while (element.previousElementSibling && isPrev) {

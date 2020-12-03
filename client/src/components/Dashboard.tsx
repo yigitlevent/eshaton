@@ -4,7 +4,7 @@ import { ListRow } from "../parts/ListRow";
 
 import { CharacterSheet } from "./CharacterSheet";
 import { CampaignSheet } from "./CampaignSheet";
-import { Shared } from "./Shared";
+import { Topbar } from "./Topbar";
 
 export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	const [display, setDisplay] = useState(["none", "none", "", {}] as [displayelement, displaytype, string, any]); // el, type, key, data
@@ -42,7 +42,7 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	return (
 		<div className="main-wrapper">
 			<div className="dashboard">
-				<Shared showLogout={true} userRequest={userRequest} />
+				<Topbar showLogout={true} userRequest={userRequest} />
 
 				<div className="my-characters">
 					<div className="title">MY CHARACTERS</div>

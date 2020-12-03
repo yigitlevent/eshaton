@@ -1,8 +1,8 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 import { generateNumString } from "../shared/generateNumString";
-import { capitalize } from "../shared/capitalize";
-import { toast } from "react-toastify";
+import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
 
 export function CampaignSheet({ data, type, close, getLists, userRequest }: sheetprops): JSX.Element {
 	const refForm = useRef({} as HTMLFormElement);
@@ -89,7 +89,7 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 
 					{((type !== "view"))
 						? <input className="extra" type="submit" id="s_submit" name="s_submit"
-							value={`${(type === "new") ? "Save" : capitalize(type)} Campaign`}
+							value={`${(type === "new") ? "Save" : capitalizeFirstLetter(type)} Campaign`}
 							onClick={(event) => { submitCamp(event, type); }}
 						/>
 						: null
@@ -137,7 +137,6 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 					{charRows}
 				</div>
 			</form>
-
 
 			{(type !== "edit") ? <form ref={refAdd} className="campaign-sheet">
 				<div className="title">ADD CHARACTER</div>

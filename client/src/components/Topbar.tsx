@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 
-export function Shared({ showLogout, userRequest }: sharedprops): JSX.Element {
+export function Topbar({ showLogout, userRequest }: topbarprops): JSX.Element {
 	return (
 		<Fragment>
 			<div className="topbar">

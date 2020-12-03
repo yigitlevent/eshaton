@@ -43,11 +43,13 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "culture-icon", type: "logo", checkboxes: 0 },
 		{ name: "culture", type: "select", checkboxes: 0, selectdata: ["Borca", "Franka", "Pollen", "Balkhan", "Hyprispania", "Purgare", "Africa"] }
 	],
+	
 	"concept": [
 		{ name: "Concept", type: "title-major", checkboxes: 0 },
 		{ name: "concept-icon", type: "logo", checkboxes: 0 },
 		{ name: "concept", type: "select", checkboxes: 0, selectdata: ["0. The Adventurer", "I. The Creator", "II. The Mentor", "III. The Martyr", "IV. The Ruler", "V. The Seeker", "VI. The Healer", "VII. The Traditionalist", "VIII. The Mediator", "IX. The Hermit", "X. The Heretic", "XI. The Conqueror", "XII. The Abomination", "XIII. Destroyer", "XIV. The Chosen", "XV. The Defiler", "XVI. The Protector", "XVII. The Visionary", "XVIII. The Zealot", "XIX. The Disciple", "XX. The Righteous", "XXI. The Traveller"] }
 	],
+
 	"cult": [
 		{ name: "Cult", type: "title-major", checkboxes: 0 },
 		{ name: "cult-icon", type: "logo", checkboxes: 0 },
@@ -63,6 +65,7 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "Stamina", type: "normal", checkboxes: 6, dice: "skill" },
 		{ name: "Toughness", type: "normal", checkboxes: 6, dice: "skill" }
 	],
+
 	"agility": [
 		{ name: "Agility", type: "title", checkboxes: 6, dice: "attribute" },
 		{ name: "Crafting", type: "normal", checkboxes: 6, dice: "skill" },
@@ -72,6 +75,7 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "Projectiles", type: "normal", checkboxes: 6, dice: "skill" },
 		{ name: "Stealth", type: "normal", checkboxes: 6, dice: "skill" }
 	],
+
 	"charisma": [
 		{ name: "Charisma", type: "title", checkboxes: 6, dice: "attribute" },
 		{ name: "Arts", type: "normal", checkboxes: 6, dice: "skill" },
@@ -81,6 +85,7 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "Negotiation", type: "normal", checkboxes: 6, dice: "skill" },
 		{ name: "Seduction", type: "normal", checkboxes: 6, dice: "skill" }
 	],
+
 	"intellect": [
 		{ name: "Intellect", type: "title", checkboxes: 6, dice: "attribute" },
 		{ name: "Artifact Lore", type: "normal", checkboxes: 6, dice: "skill" },
@@ -90,6 +95,7 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "Medicine", type: "normal", checkboxes: 6, dice: "skill" },
 		{ name: "Science", type: "normal", checkboxes: 6, dice: "skill" }
 	],
+
 	"psyche": [
 		{ name: "Psyche", type: "title", checkboxes: 6, dice: "attribute" },
 		{ name: "Cunning", type: "normal", checkboxes: 6, dice: "skill" },
@@ -99,6 +105,7 @@ export const BLOCKS: { [key: string]: blockrow[]; } = {
 		{ name: "Reaction", type: "normal", checkboxes: 6, dice: "skill" },
 		{ name: "Willpower", type: "normal", checkboxes: 6, dice: "skill" }
 	],
+
 	"instinct": [
 		{ name: "Instinct", type: "title", checkboxes: 6, dice: "attribute" },
 		{ name: "Empathy", type: "normal", checkboxes: 6, dice: "skill" },

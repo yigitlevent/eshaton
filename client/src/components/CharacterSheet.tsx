@@ -2,11 +2,11 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 
 import { generateNumString } from "../shared/generateNumString";
+import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
 
 import { Divider } from "../parts/Divider";
 import { Block } from "../parts/Block";
 import { Table } from "../parts/Table";
-import { capitalize } from "../shared/capitalize";
 
 export function CharacterSheet({ data, type, close, getLists, userRequest }: sheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
@@ -90,6 +90,7 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 		}
 	};
 
+
 	return (
 		<form ref={ref} className="character-sheet">
 			<div className="extras">
@@ -109,7 +110,7 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 
 
 				{((type !== "view"))
-					? <input className="extra" type="submit" id="s_submit" name="s_submit" value={`${(type === "new") ? "Save" : capitalize(type)} Character`}
+					? <input className="extra" type="submit" id="s_submit" name="s_submit" value={`${(type === "new") ? "Save" : capitalizeFirstLetter(type)} Character`}
 						onClick={(event) => { submitChar(event, type); }}
 					/>
 					: null

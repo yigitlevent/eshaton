@@ -96,7 +96,7 @@ interface basicprops {
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
-interface sharedprops {
+interface topbarprops {
 	showLogout: boolean;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }

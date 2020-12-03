@@ -1,8 +1,16 @@
 {
-	"name": "server",
+	"name": "eshaton-server",
 	"author": "Yiğit Levent",
 	"version": "1.0.0",
 	"private": true,
+	"homepage": "https://github.com/yigitlevent/eshaton#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yigitlevent/eshaton.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yigitlevent/eshaton/issues"
+	},
 	"type": "commonjs",
 	"scripts": {
 		"build": "tsc",

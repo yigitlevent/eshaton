@@ -2,9 +2,9 @@
 	"name": "eshaton",
 	"author": "Yiğit Levent",
 	"description": "A Degenesis Character Utility Application",
-	"version": "0.5.6",
+	"version": "0.5.7",
 	"private": true,
-	"homepage": "https://github.com/yigitlevent/eshaton#readme",
+	"homepage": "https://eshaton.heroku.com",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/yigitlevent/eshaton.git"

@@ -1,14 +1,20 @@
 {
-	"name": "client",
+	"name": "eshaton-client",
 	"author": "Yiğit Levent",
 	"version": "1.0.0",
 	"private": true,
+	"homepage": "https://github.com/yigitlevent/eshaton#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yigitlevent/eshaton.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yigitlevent/eshaton/issues"
+	},
 	"dependencies": {
-		"@types/node": "^12.19.7",
-		"@types/react": "^16.14.2",
-		"@types/react-dom": "^16.9.10",
-		"@types/react-toastify": "^4.1.0",
-		"node-sass": "^4.14.1",
+		"@types/node": "^14.14.10",
+		"@types/react": "^17.0.0",
+		"@types/react-dom": "^17.0.0",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
 		"react-scripts": "4.0.1",

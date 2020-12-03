@@ -1,3 +1,9 @@
+### 0.5.7
+
+-   CHANGE: Some symbols are changed for further clarity.
+-	DEP: Client type definition dependencies are upgraded.
+-	DEP: @types/react-toastify stub definition is uninstalled.
+
 ### 0.5.6.2
 
 -   DOC: Missed a very important documentation change.
@@ -10,7 +16,7 @@
 
 -   FIX: A possible issue where the editing might be available to a character after it is removed from a campaign.
 -   CHANGE: Limited the connection adding/removing feature to campaign editing mode.
--   DOC: Updated 
+-   DOC: Updated
 
 ### 0.5.5
 
