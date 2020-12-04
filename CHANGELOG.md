@@ -1,3 +1,8 @@
+### 0.6.1
+
+-   **FEATURE:** Added the Degenesis Map.
+-   **DEP:** Added `leaflet`, `react-leaflet`, and their respective type dependencies.
+
 ### 0.6.0
 
 -   **CHANGE:** File structure for components now reflect the dependency tree.

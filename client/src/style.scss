@@ -120,6 +120,23 @@ $color-text-redder: #aa2626 !default;
 	border: 1px $color-yellow solid;
 }
 
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+	color: $color-text !important;
+	background: $color-form !important;
+	border: none !important;
+
+	&.leaflet-disabled {
+		color: $color-text-darker !important;
+		background: $color-row !important;
+	}
+}
+
+.leaflet-control-attribution {
+	background: $color-row !important;
+	color: $color-text !important;
+}
+
 @keyframes spin {
 	100% {
 		transform: rotate(360deg);
@@ -357,6 +374,12 @@ a {
 						width: 22px;
 					}
 
+					&:active,
+					&:focus {
+						border: none;
+						appearance: none;
+					}
+
 					&.discord {
 						background: transparent url("./assets/icons/discord.svg") no-repeat center center;
 						margin: 0;
@@ -365,6 +388,10 @@ a {
 					&.github {
 						background: transparent url("./assets/icons/github.svg") no-repeat center center;
 						margin: 0;
+					}
+
+					&.map {
+						margin: 24px -44px 0 0;
 					}
 
 					&.logout {
@@ -430,6 +457,16 @@ a {
 	}
 
 	& > .main-wrapper {
+		& > .leaflet-container {
+			width: 600px;
+			height: 600px;
+			margin: 10px auto;
+			padding: 5px 15px 15px;
+			background: #111;
+			border: 1px solid #ec1e26;
+			max-width: 100%;
+		}
+
 		& > .dashboard,
 		& > .mini {
 			width: 600px;
@@ -488,7 +525,7 @@ a {
 				@include list;
 			}
 		}
-		
+
 		& > .dice-roller-wrapper {
 			position: fixed;
 			width: 100%;

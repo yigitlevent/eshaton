@@ -2,7 +2,7 @@
 	"name": "eshaton",
 	"author": "Yiğit Levent",
 	"description": "A Degenesis Character Utility Application",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"private": true,
 	"homepage": "https://eshaton.heroku.com",
 	"repository": {

@@ -2,20 +2,27 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 
 import { DiceRoller } from "./dashboard/charactersheet/DiceRoller";
 
-import { ListRow } from "./dashboard/ListRow";
 import { CharacterSheet } from "./dashboard/CharacterSheet";
 import { CampaignSheet } from "./dashboard/CampaignSheet";
+import { ListRow } from "./dashboard/ListRow";
+import { Map } from "./dashboard/Map";
 
 import { Topbar } from "./shared/Topbar";
 
 export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	const [display, setDisplay] = useState(["none", "none", "", {}] as [displayelement, displaytype, string, any]); // el, type, key, data
 	const [diceRoller, setDiceRoller] = useState(<Fragment key="a" />);
+	const [mapDisplay, setMapDisplay] = useState(false);
 
 	const [listCount, setListCount] = useState(0);
 
 	const [charRows, setCharRows] = useState<JSX.Element[]>([]);
 	const [campRows, setCampRows] = useState<JSX.Element[]>([]);
+
+
+	const toggleMap = () => {
+		setMapDisplay((mapDisplay) ? false : true);
+	};
 
 	const close = (): void => {
 		setDisplay(["none", "none", "", {}]);
@@ -53,7 +60,7 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	return (
 		<div className="main-wrapper">
 			<div className="dashboard">
-				<Topbar showLogout={true} userRequest={userRequest} />
+				<Topbar showLogout={true} toggleMap={toggleMap} userRequest={userRequest} />
 
 				<div className="my-characters">
 					<div className="title">MY CHARACTERS</div>
@@ -71,6 +78,8 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 					</div>
 				</div>
 			</div>
+
+			{(mapDisplay) ? <Map /> : null}
 
 			{(display[0] === "character")
 				? <Fragment>

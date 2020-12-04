@@ -2,6 +2,7 @@ import { StrictMode, useCallback, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { ToastContainer, Slide, toast } from "react-toastify";
 
+import "leaflet/dist/leaflet.css"
 import "react-toastify/dist/ReactToastify.css";
 import "./style.scss";
 

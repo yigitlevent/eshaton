@@ -21,6 +21,7 @@
 -   Players may login and save their character to a database, or import/export as they wish.
 -   Gamemasters can create campaigns, and add characters.
 -   Roll dice on the website or send the roll results to a discord server.
+-   Degenesis map, powered by `leaflet`.
 
 ## Usage
 

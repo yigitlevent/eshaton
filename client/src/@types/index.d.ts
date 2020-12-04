@@ -100,6 +100,7 @@ interface basicprops {
 
 interface topbarprops {
 	showLogout: boolean;
+	toggleMap?: () => void;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
 }
 
