@@ -1,3 +1,11 @@
+### 0.6.0
+
+-   **CHANGE:** File structure for components now reflect the dependency tree.
+-   **CHANGE:** Moved `DiceRoller` to Dashboard.
+-   **CHANGE:** Added more text to the `DiceRoller` output.
+-   **CHANGE:** Bundled `Block`s inside the `CharacterSheet` to make it more clear and robust.
+-   **FIX:** Fixed some SCSS issues.
+
 ### 0.5.9.1
 
 -   **FIX:** Package version updated.

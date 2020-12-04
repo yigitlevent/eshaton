@@ -51,24 +51,26 @@ interface entranceprops {
 }
 
 interface sheetprops {
-	data: any;
-	type: displaytype;
+	userData: any;
+	displayType: displaytype;
 	close: () => void;
 	getLists: () => void;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
+	openDiceRoller: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, type: string) => void;
 }
 
 interface blockprops {
-	datakey: string;
-	type: string;
-	data: any;
+	blockKey: string;
+	displayType: string;
+	userData: any;
 	userRequest: (path: string, requestType: requests, data?: any) => Promise<any[] | boolean>;
+	openDiceRoller: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, type: string) => void;
 }
 
 interface tableprops {
-	datakey: string;
-	type: string;
-	data: any;
+	blockKey: string;
+	displayType: string;
+	userData: any;
 }
 
 interface rowDataset {
@@ -104,7 +106,7 @@ interface topbarprops {
 interface selectprops {
 	row: blockrow;
 	onChange: (event: React.ChangeEvent<HTMLSelectElement>, rowName: string) => void;
-	type: string;
+	displayType: string;
 	value: string;
 }
 

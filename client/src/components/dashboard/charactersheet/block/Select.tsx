@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function Select({ row, onChange, type, value }: selectprops): JSX.Element {
+export function Select({ row, onChange, displayType, value }: selectprops): JSX.Element {
 	const ref: React.MutableRefObject<HTMLSelectElement> | React.MutableRefObject<null> = useRef(null);
 
 	const options = row.selectdata?.map(
@@ -34,8 +34,8 @@ export function Select({ row, onChange, type, value }: selectprops): JSX.Element
 			id={`c_${row.name}`}
 			key={`c_${row.name} ${value}`}
 			onChange={(e) => { onChange(e, row.name); }}
-			defaultValue={(value && type !== "new") ? value : ""}
-			disabled={(type === "view" || type === "delete") ? true : false}
+			defaultValue={(value && displayType !== "new") ? value : ""}
+			disabled={(displayType === "view" || displayType === "delete") ? true : false}
 		>
 			{options}
 		</select>

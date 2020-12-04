@@ -1,14 +1,14 @@
-import { useRef } from "react";
+import { Fragment, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import { generateNumString } from "../shared/generateNumString";
-import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
+import { generateNumString } from "../../shared/generateNumString";
+import { capitalizeFirstLetter } from "../../shared/capitalizeFirstLetter";
 
-import { Divider } from "../parts/Divider";
-import { Block } from "../parts/Block";
-import { Table } from "../parts/Table";
+import { Divider } from "./charactersheet/Divider";
+import { Block } from "./charactersheet/Block";
+import { Table } from "./charactersheet/Table";
 
-export function CharacterSheet({ data, type, close, getLists, userRequest }: sheetprops): JSX.Element {
+export function CharacterSheet({ userData, displayType, close, getLists, userRequest, openDiceRoller }: sheetprops): JSX.Element {
 	const ref = useRef({} as HTMLFormElement);
 	const importRef = useRef({} as HTMLInputElement);
 
@@ -90,6 +90,14 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 		}
 	};
 
+	const groups = [
+		{ isBlock: true, name: "ARCHETYPE", blocks: ["main-left", "main-center", "main-right", "culture", "concept", "cult"] },
+		{ isBlock: true, name: "ATTRIBUTES & SKILLS", blocks: ["body", "agility", "charisma", "intellect", "psyche", "instinct"] },
+		{ isBlock: true, name: "ADVANTAGES", blocks: ["origins", "potentials", "scars"] },
+		{ isBlock: true, name: "CONDITION", blocks: ["modifiers", "conditions", "complications"] },
+		{ isBlock: false, name: "ARSENAL", blocks: ["weapons", "armors"] },
+		{ isBlock: false, name: "POSSESSIONS", blocks: ["equipments_1", "equipments_2", "artifacts"] },
+	];
 
 	return (
 		<form ref={ref} className="character-sheet">
@@ -97,7 +105,7 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 				<label className="extra label">Character ID: </label>
 
 				<input className="extra id" id="c_character_id" name="c_character_id"
-					value={(data.secretkey) ? data.secretkey : generateNumString(32)}
+					value={(userData.secretkey) ? userData.secretkey : generateNumString(32)}
 					key={generateNumString(32)}
 					readOnly
 				/>
@@ -109,9 +117,9 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 				<input className="extra" type="button" id="c_close" name="c_close" value="Close" onClick={close} />
 
 
-				{((type !== "view"))
-					? <input className="extra" type="submit" id="s_submit" name="s_submit" value={`${(type === "new") ? "Save" : capitalizeFirstLetter(type)} Character`}
-						onClick={(event) => { submitChar(event, type); }}
+				{((displayType !== "view"))
+					? <input className="extra" type="submit" id="s_submit" name="s_submit" value={`${(displayType === "new") ? "Save" : capitalizeFirstLetter(displayType)} Character`}
+						onClick={(event) => { submitChar(event, displayType); }}
 					/>
 					: null
 				}
@@ -120,56 +128,24 @@ export function CharacterSheet({ data, type, close, getLists, userRequest }: she
 				<input className="extra" type="button" id="c_import" name="c_import" value="Import Character" onClick={(event) => { importTrigger(); }} />
 			</div>
 
-			<Divider>{`ARCHETYPE`}</Divider>
-			<div className="wrapper">
-				<Block datakey={"main-left"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"main-center"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"main-right"} type={type} data={data} userRequest={userRequest} />
-			</div>
-
-			<div className="wrapper">
-				<Block datakey={"culture"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"concept"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"cult"} type={type} data={data} userRequest={userRequest} />
-			</div>
-
-			<Divider>{`ATTRIBUTES & SKILLS`}</Divider>
-			<div className="wrapper">
-				<Block datakey={"body"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"agility"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"charisma"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"intellect"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"psyche"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"instinct"} type={type} data={data} userRequest={userRequest} />
-			</div>
-
-			<Divider>{`ADVANTAGES`}</Divider>
-			<div className="wrapper">
-				<Block datakey={"origins"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"potentials"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"scars"} type={type} data={data} userRequest={userRequest} />
-			</div>
-
-			<Divider>{`CONDITION`}</Divider>
-			<div className="wrapper">
-				<Block datakey={"modifiers"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"conditions"} type={type} data={data} userRequest={userRequest} />
-				<Block datakey={"complications"} type={type} data={data} userRequest={userRequest} />
-			</div>
-
-			<Divider>{`ARSENAL`}</Divider>
-			<div className="wrapper">
-				<Table datakey={"weapons"} type={type} data={data} />
-				<Table datakey={"armors"} type={type} data={data} />
-			</div>
-
-			<Divider>{`POSSESSIONS`}</Divider>
-			<div className="wrapper">
-				<Table datakey={"equipments_1"} type={type} data={data} />
-				<Table datakey={"equipments_2"} type={type} data={data} />
-				<Table datakey={"equipments_3"} type={type} data={data} />
-				<Table datakey={"artifacts"} type={type} data={data} />
-			</div>
+			{groups.map((val, i) => {
+				return (
+					<Fragment key={val.name + i}>
+						<Divider>{val.name}</Divider>
+						<div className="wrapper">
+							{(val.isBlock)
+								? val.blocks.map((val) => {
+									return (<Block key={val} blockKey={val} displayType={displayType} userData={userData}
+										userRequest={userRequest} openDiceRoller={openDiceRoller} />);
+								})
+								: val.blocks.map((val) => {
+									return <Table key={val} blockKey={val} displayType={displayType} userData={userData} />;
+								})
+							}
+						</div>
+					</Fragment>
+				);
+			})}
 		</form>
 	);
 }

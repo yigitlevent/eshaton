@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
-import { ListRow } from "../parts/ListRow";
+import { DiceRoller } from "./dashboard/charactersheet/DiceRoller";
 
-import { CharacterSheet } from "./CharacterSheet";
-import { CampaignSheet } from "./CampaignSheet";
-import { Topbar } from "./Topbar";
+import { ListRow } from "./dashboard/ListRow";
+import { CharacterSheet } from "./dashboard/CharacterSheet";
+import { CampaignSheet } from "./dashboard/CampaignSheet";
+
+import { Topbar } from "./shared/Topbar";
 
 export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	const [display, setDisplay] = useState(["none", "none", "", {}] as [displayelement, displaytype, string, any]); // el, type, key, data
+	const [diceRoller, setDiceRoller] = useState(<Fragment key="a" />);
 
 	const [listCount, setListCount] = useState(0);
 
@@ -22,6 +25,14 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 	const getLists = useCallback(() => {
 		setListCount(l => l + 1);
 	}, []);
+
+	const closeDiceRoller = (): void => {
+		setDiceRoller(<Fragment />);
+	};
+
+	const openDiceRoller = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, type: string): void => {
+		setDiceRoller(<DiceRoller key="b" type={type} event={event} close={closeDiceRoller} userRequest={userRequest} />);
+	};
 
 	useEffect(() => {
 		userRequest("/char/list", "list_char")
@@ -62,11 +73,14 @@ export function Dashboard({ userRequest }: basicprops): JSX.Element {
 			</div>
 
 			{(display[0] === "character")
-				? <CharacterSheet data={display[3]} type={display[1]} close={close} getLists={getLists} userRequest={userRequest} />
+				? <Fragment>
+					<CharacterSheet userData={display[3]} displayType={display[1]} close={close} getLists={getLists} userRequest={userRequest} openDiceRoller={openDiceRoller} />
+					{diceRoller}
+				</Fragment>
 				: null}
 
 			{(display[0] === "campaign")
-				? <CampaignSheet data={display[3]} type={display[1]} close={close} getLists={getLists} userRequest={userRequest} />
+				? <CampaignSheet userData={display[3]} displayType={display[1]} close={close} getLists={getLists} userRequest={userRequest} openDiceRoller={openDiceRoller} />
 				: null}
 		</div>
 	);

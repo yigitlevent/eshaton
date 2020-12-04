@@ -5,7 +5,7 @@ import { ToastContainer, Slide, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./style.scss";
 
-import { Spinner } from "./parts/Spinner";
+import { Spinner } from "./components/Spinner";
 import { Entrance } from "./components/Entrance";
 import { Dashboard } from "./components/Dashboard";
 

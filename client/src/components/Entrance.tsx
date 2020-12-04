@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { Login } from "./Login";
-import { Register } from "./Register";
-import { Topbar } from "./Topbar";
+import { Login } from "./entrance/Login";
+import { Register } from "./entrance/Register";
+import { Topbar } from "./shared/Topbar";
 
 export function Entrance({ userRequest }: basicprops): JSX.Element {
 	const [isLogin, setIsLogin] = useState<boolean>(true);

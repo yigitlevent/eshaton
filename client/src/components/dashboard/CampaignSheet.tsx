@@ -1,10 +1,10 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-import { generateNumString } from "../shared/generateNumString";
-import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
+import { generateNumString } from "../../shared/generateNumString";
+import { capitalizeFirstLetter } from "../../shared/capitalizeFirstLetter";
 
-export function CampaignSheet({ data, type, close, getLists, userRequest }: sheetprops): JSX.Element {
+export function CampaignSheet({ userData, displayType, close, getLists, userRequest, openDiceRoller }: sheetprops): JSX.Element {
 	const refForm = useRef({} as HTMLFormElement);
 	const refAdd = useRef({} as HTMLFormElement);
 	const refRem = useRef({} as HTMLFormElement);
@@ -58,21 +58,23 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 	};
 
 	useEffect(() => {
-		userRequest("/camp/get", "get_camp", { s_secretkey: data.secretkey })
-			.then((val: any) => {
-				if (val && val[0] && val[0].characters) {
-					setCharRows((val[0].characters as []).map((character: string, index: number) => {
-						return (
-							<div className="row characters-list" key={val[0].characters_name[index]}>
-								<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${character}`); }} value="" />
-								<span className="name">{val[0].characters_name[index]}</span>
-							</div>
-						);
-					}));
-				}
-				else { setCharRows([]); }
-			});
-	}, [listCount, data.secretkey, userRequest]);
+		if (displayType === "edit") {
+			userRequest("/camp/get", "get_camp", { s_secretkey: userData.secretkey })
+				.then((val: any) => {
+					if (val && val[0] && val[0].characters) {
+						setCharRows((val[0].characters as []).map((character: string, index: number) => {
+							return (
+								<div className="row characters-list" key={val[0].characters_name[index]}>
+									<input className="button secretkey" type="button" onClick={() => { toast.info(`Secret Key: ${character}`); }} value="" />
+									<span className="name">{val[0].characters_name[index]}</span>
+								</div>
+							);
+						}));
+					}
+					else { setCharRows([]); }
+				});
+		}
+	}, [listCount, displayType, userData.secretkey, userRequest]);
 
 	return (
 		<Fragment>
@@ -80,17 +82,17 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				<div className="extras">
 					<label className="extra label">Campaign ID: </label>
 					<input className="extra id" id="s_campaign_id" name="s_campaign_id"
-						value={(data.secretkey) ? data.secretkey : generateNumString(32)}
+						value={(userData.secretkey) ? userData.secretkey : generateNumString(32)}
 						key={generateNumString(32)}
 						readOnly
 					/>
 
 					<input className="extra" type="button" id="s_close" name="s_close" value="Close" onClick={close} />
 
-					{((type !== "view"))
+					{((displayType !== "view"))
 						? <input className="extra" type="submit" id="s_submit" name="s_submit"
-							value={`${(type === "new") ? "Save" : capitalizeFirstLetter(type)} Campaign`}
-							onClick={(event) => { submitCamp(event, type); }}
+							value={`${(displayType === "new") ? "Save" : capitalizeFirstLetter(displayType)} Campaign`}
+							onClick={(event) => { submitCamp(event, displayType); }}
 						/>
 						: null
 					}
@@ -99,36 +101,36 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				<div className="wrapper">
 					<label className="extra">Campaign Name:</label>
 					<input className="extra" type="text" id="s_campaign_name" name="s_campaign_name"
-						key={data.name}
-						defaultValue={(data && type !== "new") ? data.name : null}
-						readOnly={(type !== "new") ? true : false}
+						key={userData.name}
+						defaultValue={(userData && displayType !== "new") ? userData.name : null}
+						readOnly={(displayType !== "new") ? true : false}
 					/>
 				</div>
 
 				<div className="wrapper">
 					<label className="extra">Discord Bot Integration Enabled:</label>
 					<input className="extra" type="checkbox" id="s_discord_enabled" name="s_discord_enabled"
-						key={data.discord_enabled}
-						defaultChecked={(data && type !== "new") ? data.discord_enabled : false}
-						disabled={(type === "view" || type === "delete") ? true : false}
+						key={userData.discord_enabled}
+						defaultChecked={(userData && displayType !== "new") ? userData.discord_enabled : false}
+						disabled={(displayType === "view" || displayType === "delete") ? true : false}
 					/>
 				</div>
 
 				<div className="wrapper">
 					<label className="extra">Discord Server ID:</label>
 					<input className="extra" type="text" id="s_discord_server" name="s_discord_server"
-						key={data.discord_server}
-						defaultValue={(data && type !== "new") ? data.discord_server : null}
-						readOnly={(type === "view" || type === "delete") ? true : false}
+						key={userData.discord_server}
+						defaultValue={(userData && displayType !== "new") ? userData.discord_server : null}
+						readOnly={(displayType === "view" || displayType === "delete") ? true : false}
 					/>
 				</div>
 
 				<div className="wrapper">
 					<label className="extra">Discord Channel Name:</label>
 					<input className="extra" type="text" id="s_discord_channel" name="s_discord_channel"
-						key={data.s_discord_channel}
-						defaultValue={(data && type !== "new") ? data.discord_channel : null}
-						readOnly={(type === "view" || type === "delete") ? true : false}
+						key={userData.s_discord_channel}
+						defaultValue={(userData && displayType !== "new") ? userData.discord_channel : null}
+						readOnly={(displayType === "view" || displayType === "delete") ? true : false}
 					/>
 				</div>
 
@@ -138,11 +140,11 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				</div>
 			</form>
 
-			{(type !== "edit") ? <form ref={refAdd} className="campaign-sheet">
+			{(displayType === "edit") ? <form ref={refAdd} className="campaign-sheet">
 				<div className="title">ADD CHARACTER</div>
 				<div className="wrapper">
 					<input className="extra id hide" id="s_campaign_id" name="s_campaign_id"
-						value={(data.secretkey) ? data.secretkey : generateNumString(32)}
+						value={(userData.secretkey) ? userData.secretkey : generateNumString(32)}
 						key={generateNumString(32)}
 						readOnly
 					/>
@@ -155,11 +157,11 @@ export function CampaignSheet({ data, type, close, getLists, userRequest }: shee
 				</div>
 			</form> : null}
 
-			{(type === "edit") ? <form ref={refRem} className="campaign-sheet">
+			{(displayType === "edit") ? <form ref={refRem} className="campaign-sheet">
 				<div className="title">REMOVE CHARACTER</div>
 				<div className="wrapper">
 					<input className="extra id hide" id="s_campaign_id" name="s_campaign_id"
-						value={(data.secretkey) ? data.secretkey : generateNumString(32)}
+						value={(userData.secretkey) ? userData.secretkey : generateNumString(32)}
 						key={generateNumString(32)}
 						readOnly
 					/>

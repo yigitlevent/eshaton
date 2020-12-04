@@ -1,10 +1,10 @@
 import { Fragment, useRef } from "react";
 import { toast } from "react-toastify";
 
-import { capitalizeFirstLetter } from "../shared/capitalizeFirstLetter";
-import { roll } from "../shared/roll";
+import { capitalizeFirstLetter } from "../../../shared/capitalizeFirstLetter";
+import { roll } from "../../../shared/roll";
 
-import { attributes } from "../data/abilities";
+import { attributes } from "../../../data/abilities";
 
 export function DiceRoller({ type, event, close, userRequest }: dicerollerprops): JSX.Element {
 	const diceRef = useRef({} as HTMLFormElement);
@@ -36,7 +36,7 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 		let firstNumber = 0;
 		let secondNumber = 0;
 		let modifier = 0;
-		
+
 		let next = (element.nextElementSibling as HTMLInputElement);
 		let isNext = next.classList.contains("checkbox") === true;
 
@@ -68,19 +68,21 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 
 		const charName = (document.getElementById("c_name") as any).value;
 		const totalDice = firstNumber + secondNumber + modifier;
-		let resultMessage = `rolled ${(data.attribute) ? `${capitalizeFirstLetter(data.attribute.substring(2))}+` : ""}${capitalizeFirstLetter(element.innerText.toLowerCase())}. `;
+		let resultMessage = `rolled `
+			+ `${(data.attribute) ? `${capitalizeFirstLetter(data.attribute.substring(2))}(${secondNumber})+` : ""}`
+			+ `${capitalizeFirstLetter(element.innerText.toLowerCase())}(${firstNumber})`
+			+ `${(modifier > 0) ? ` with a modifier of ${modifier}. ` : ". "}`;
 
 		if (totalDice < 1) {
 			resultMessage += `Action number is zero, no dice has been rolled.`;
 		}
 		else {
 			const results = roll(totalDice);
-
-			resultMessage += `Results: ${results.results.join(", ")}. `;
+			resultMessage += `Result${(results.results.length > 1) ? "s" : ""}: ${results.results.join(", ")}. `;
 
 			let countText = "";
 			if (results.countSuccesses === 0 && results.countOnes > 0) {
-				countText = `Botch with ${results.countOnes} one${(results.countOnes > 1) ? "s" : ""}.`;
+				countText = `Botched with ${results.countOnes} one${(results.countOnes > 1) ? "s" : ""}.`;
 			}
 			else if (results.countSuccesses < data.difficulty) {
 				countText = `Failed with ${results.countSuccesses} success${(results.countSuccesses > 1) ? "es" : ""} against a difficulty of ${data.difficulty}.`;
@@ -97,15 +99,15 @@ export function DiceRoller({ type, event, close, userRequest }: dicerollerprops)
 		}
 
 		userRequest("/dice/roll", "dice_roll", { d_charname: charName, d_message: resultMessage, d_display_name: charName })
-			.then(() => { toast.success(resultMessage, { autoClose: false, closeOnClick: false }); });
+			.then(() => { toast.success(`${charName} ${resultMessage}`, { autoClose: false, closeOnClick: false }); });
 	};
 
 	const attr = attributes.map((att) => {
-		return <option value={`c_${att}`}>{capitalizeFirstLetter(att)}</option>;
+		return <option key={`c_${att}`} value={`c_${att}`}>{capitalizeFirstLetter(att)}</option>;
 	});
 
 	return (
-		<div className="dice-roller-wrapper">
+		<div className="dice-roller-wrapper" key="b">
 			<div className="background" onClick={() => { close(); }} />
 			<form className="dice-roller" ref={diceRef}>
 				<div className="inner">
