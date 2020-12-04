@@ -20,7 +20,7 @@ export function Topbar({ showLogout, toggleMap, userRequest }: topbarprops): JSX
 				{(showLogout)
 					? <Fragment>
 						<input className="button logout" type="button" value="Logout" onClick={() => { userRequest("/user/logout", "logout"); }} />
-						{(toggleMap) ? <input className="button map" type="button" value="Map" onClick={() => { toggleMap(); }} /> : null}
+						{/*(toggleMap) ? <input className="button map" type="button" value="Map" onClick={() => { toggleMap(); }} /> : null*/}
 					</Fragment>
 					: null
 				}

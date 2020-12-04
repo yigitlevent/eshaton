@@ -1,3 +1,7 @@
+### 0.6.1.1
+
+-   **CHANGE:** Removed the map toggle for now because I have to figure out how to store the tile files first.
+
 ### 0.6.1
 
 -   **FEATURE:** Added the Degenesis Map.
