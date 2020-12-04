@@ -1,3 +1,7 @@
+### 0.6.2
+
+-   **FIX:** Fixed an issue with campaign characters not being reset.
+
 ### 0.6.1.1
 
 -   **CHANGE:** Removed the map toggle for now because I have to figure out how to store the tile files first.

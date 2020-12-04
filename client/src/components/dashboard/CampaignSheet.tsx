@@ -58,7 +58,7 @@ export function CampaignSheet({ userData, displayType, close, getLists, userRequ
 	};
 
 	useEffect(() => {
-		if (displayType === "edit") {
+		if (displayType !== "none" && displayType !== "new") {
 			userRequest("/camp/get", "get_camp", { s_secretkey: userData.secretkey })
 				.then((val: any) => {
 					if (val && val[0] && val[0].characters) {
@@ -73,6 +73,9 @@ export function CampaignSheet({ userData, displayType, close, getLists, userRequ
 					}
 					else { setCharRows([]); }
 				});
+		}
+		else {
+			setCharRows([<Fragment />]);
 		}
 	}, [listCount, displayType, userData.secretkey, userRequest]);
 
