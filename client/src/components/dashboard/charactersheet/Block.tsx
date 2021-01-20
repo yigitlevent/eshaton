@@ -3,6 +3,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Select } from "./block/Select";
 
 import { BLOCKS } from "../../../data/blocks";
+import { attributes, skills } from "../../../data/abilities";
 
 export function Block({ blockKey, displayType, userData, userRequest, openDiceRoller }: blockprops): JSX.Element {
 	const imgRef: React.MutableRefObject<HTMLImageElement> | React.MutableRefObject<null> = useRef(null);
@@ -20,6 +21,14 @@ export function Block({ blockKey, displayType, userData, userRequest, openDiceRo
 		let isNext = element.nextElementSibling?.classList.contains("checkbox") === true;
 		let isNextChecked = (isNext) ? (element.nextElementSibling as HTMLInputElement).checked : false;
 
+		console.log(element.classList);
+		console.log(element.classList[1]);
+		console.log(attributes.findIndex(value => value === element.classList[1]));
+
+		const isAttribute = attributes.findIndex(value => value === element.classList[1]) >= 0;
+		const isSkill = skills.findIndex(value => value === element.classList[1]) >= 0;
+		console.log(isAttribute);
+
 		if (!element.checked && !isPrev && isNext && !isNextChecked) { element.checked = false; }
 		else if (element.checked && isPrev) {
 			element.checked = true;
@@ -36,6 +45,7 @@ export function Block({ blockKey, displayType, userData, userRequest, openDiceRo
 			}
 		}
 	};
+
 	const BLOCKDATA = BLOCKS[blockKey];
 
 	const DATA = (userData.data) ? JSON.parse(userData.data.replace(/&quot;/g, '"')) : undefined;
@@ -49,7 +59,7 @@ export function Block({ blockKey, displayType, userData, userRequest, openDiceRo
 				<input
 					key={`c_${basicKey}_${i} ${userData.name}`}
 					type="checkbox"
-					className="checkbox"
+					className={`checkbox ${basicKey} ${basicKey}_${i}`}
 					id={`c_${basicKey}_${i}`}
 					name={`c_${basicKey}_${i}`}
 					onClick={checkboxPropogation}
